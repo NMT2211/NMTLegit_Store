@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/shop/navshop.css">
+</head>
+<body>
+    <header th:fragment="shopNavbar">
+        <div class="top-bar py-2">
+            <div class="container d-flex justify-content-between" >
+                <div>
+                    <a href="#"><i class="fas fa-shield-alt"></i> Bảo vệ máy tính của bạn</a>
+                </div>
+                <div>
+                    <a href="#" class="mx-2"><i class="fas fa-book"></i> Hướng dẫn mua hàng</a>
+                    <a href="#" class="mx-2"><i class="fas fa-gift"></i> Ưu đãi khách hàng</a>
+                    <a href="#" class="mx-2"><i class="fas fa-phone"></i> Thông tin liên hệ</a>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="navbar navbar-expand-lg">
+            <div class="container d-flex justify-content-between">
+                <a class="navbar-brand" href="#">
+                    <img src="/images/logo.svg" alt="Divine Shop">
+                    <span class="fw-bold">Divine Shop</span>
+                </a>
+                <form class="search-bar mx-auto d-flex">
+                    <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+                <div class="user-options d-flex align-items-center">
+				    <button type="button" class="btn btn-light d-flex align-items-center">
+				        <i class="fa-solid fa-user-large"></i>
+				    </button>
+				    <div class="d-flex align-items-center mx-2">
+				        <a href="#">Đăng nhập</a>
+				        <span class="mx-1">/</span>
+				        <a href="#">Đăng ký</a>
+				    </div>
+				    <a href="#" class="cart-btn text-decoration-none">
+					    <i class="fas fa-shopping-cart"></i>
+					    <span class="fw-bold">Giỏ hàng</span>
+					    <div class="cart-badge">0</div>
+					</a>
+
+
+				</div>
+
+            </div>
+        </nav>
+        <div class="container d-flex justify-content-between shorter-spacing">
+            <a href="#"><i class="fas fa-eye"></i> Sản phẩm bạn vừa xem</a>
+            <a href="#"><i class="fas fa-fire"></i> Sản phẩm mua nhiều</a>
+            <a href="#"><i class="fas fa-percent"></i> Sản phẩm khuyến mại</a>
+            <a href="#"><i class="fas fa-briefcase"></i> Tuyển dụng</a>
+            <a href="#"><i class="fas fa-credit-card"></i> Hình thức thanh toán</a>
+        </div>
+        
+        
+        <div class=" d-flex category-section ">
+        	<div class="container d-flex align-items-center ">
+	        	<div class="dropdown">
+			        <button class="category-btn" type="button" id="dropdownMenuButton">
+			            <i class="fas fa-bars"></i>
+			            <span>Danh mục sản phẩm</span>
+			        </button>
+			        <ul class="dropdown-menu">
+			            <li th:each="category : ${categories}">
+			                <a class="dropdown-item" href="#">
+			                    
+			                    <span th:utext="${category.icon}"></span>
+			                    <span th:text="${category.tenDanhMuc}"></span>
+			                </a>
+			            </li>
+			        </ul>
+			    </div>
+			    <div class="category-links d-flex ">
+			        <a href="https://divineshop.vn/tin-tuc" target="_blank">
+			            <img src="https://cdn.divineshop.vn/image/catalog/Anh/Icon svg/Nap-thesvg-30724.svg" alt="Thủ thuật & Tin Tức">
+			            <span>Thủ thuật & Tin Tức</span>
+			        </a>
+			        <a href="https://help.divineshop.vn/huong-dan-mua-hang/huong-dan-tao-tai-khoan" target="_blank">
+			            <img src="https://cdn.divineshop.vn/image/catalog/Anh/Icon svg/Gioi-thieu-ban-be-87652.svg" alt="Hướng dẫn mua hàng">
+			            <span>Hướng dẫn mua hàng</span>
+			        </a>
+			        <a href="https://docs.google.com/forms/u/1/d/e/1FAIpQLSdsN84o3rQhofXqLY9MxTkyeWGq7-7PRDldNu5w59LGCgnndg/viewform" target="_blank">
+			            <img src="https://cdn.divineshop.vn/image/catalog/Anh/Icon svg/Lien-he-hop-tac-33199.svg" alt="Liên hệ hợp tác">
+			            <span>Liên hệ hợp tác</span>
+			        </a>
+			        <a href="https://t.me/divineshopsale" target="_blank">
+			            <img src="https://cdn.divineshop.vn/image/catalog/Anh/14.03.2022/sale-80749.svg" alt="GA - Sale Divine">
+			            <span>GA - Sale Divine</span>
+			        </a>
+			    </div>
+        	</div>
+		    
+		</div>
+
+		
+        
+    </header>
+    
+    
+    
+    
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

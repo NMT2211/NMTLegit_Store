@@ -1,0 +1,133 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: white;
+}
+
+.navbar {
+    background-color: #3366CC;
+    border-bottom: 2px solid #e3e3e3;
+}
+
+.navbar-brand img {
+    height: 40px;
+}
+header{
+	background-color: #3366CC;
+	color: white;
+}
+.navbar-nav .nav-link {
+    
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.navbar-nav .nav-link:hover {
+    
+}
+
+.banner img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    
+}
+
+.card-text {
+    font-size: 14px;
+    
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+
+.product-container {
+            max-width: 1200px;
+            margin: auto;
+        }
+        .product-container h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .product-item {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .product-item img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .product-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: black;
+        }
+        .product-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #d32f2f;
+        }
+        .product-old-price {
+            font-size: 14px;
+            text-decoration: line-through;
+            color: #888;
+        }
+        .discount-badge {
+            background: red;
+            color: white;
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        
+        
+
+footer {
+    background-color: #343a40;
+    color: white;
+    padding: 20px 0;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

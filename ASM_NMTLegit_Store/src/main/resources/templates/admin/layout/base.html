@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title} ?: 'Admin Dashboard'"></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+
+    <!-- Sử dụng fragment đúng cú pháp -->
+    <div th:replace="~{admin/layout/navbar :: adminNavbar}"></div>
+
+    <!-- Nội dung chính -->
+    <div class="container mt-4">
+        <div th:fragment="content">
+            <p class="text-danger text-center">⚠ Đây là nội dung mặc định. Nếu thấy dòng này, nội dung thực sự chưa được chèn vào!</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

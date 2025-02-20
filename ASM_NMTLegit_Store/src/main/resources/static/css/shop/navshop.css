@@ -1,0 +1,439 @@
+ *{
+	 text-decoration: none;
+ }
+ 
+ .container {
+		    max-width: 1250px; /* Chuẩn của Bootstrap */
+		    
+		}
+
+		
+        .top-bar {
+            background-color: #0056b3;
+            color: white;
+            font-weight: bold;
+        }
+        .navbar{
+        
+        }
+        
+        .navbar, header {
+            background-color: #007AFF;
+            color: white;
+            
+        }
+        
+        .navbar a, .user-options a, .top-bar a {
+            color: white !important;
+            font-weight: bold;
+        }
+        
+        .navbar-brand img {
+            height: 50px;
+        }
+        .navbar-brand span {
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .search-bar input {
+            border-radius: 20px;
+            border: none;
+            padding: 8px 15px;
+            width: 300px;
+        }
+        
+        .search-bar button {
+            background-color: white;
+            border: none;
+            color: #0066DA;
+            padding: 8px 12px;
+            border-radius: 20px;
+        }
+        
+        .cart {
+            background-color: white;
+            color: #007AFF;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-weight: bold;
+        }
+        
+        .container a {
+            font-size: 14.5px;
+            color: white !important;
+            font-weight: normal;
+            text-decoration: none;
+        }
+        
+        .shorter-spacing {
+            padding-top: 5px;
+            padding-bottom: 16px;
+        }
+        .le{
+        
+        }
+        .navbar-brand{
+        
+        	font-size: 18px;
+        }
+        .user-options button {
+		    display: flex;
+		    align-items: center;
+		    background: transparent;
+		    border: 2px solid white;
+		    color: white;
+		    font-weight: bold;
+		    padding: 12px 12px;
+		    border-radius: 100%;
+		    font-size: 16px;
+		    transition: all 0.3s ease-in-out;
+		}
+        /* Phần danh mục sản phẩm */
+		.category-section {
+		    background: white;
+		    padding: 10px;
+		    
+		    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		}
+		
+		/* Nút danh mục sản phẩm */
+		.category-btn {
+		    display: flex;
+		    align-items: center;
+		    background: transparent;
+		    border: none;
+		    font-size: 14px;
+		    font-weight: bold;
+		    cursor: pointer;
+		    padding: 8px 12px;
+		}
+		.category-btn:hover {
+		    background: rgba(255, 255, 255, 0.2);
+		    border-radius: 8px;
+		}
+		
+		
+		.category-btn i {
+		    font-size: 22px;
+		    margin-right: 8px;
+		}
+		
+		/* Liên kết danh mục */
+		.category-links {
+		    display: flex;
+		    gap: 20px;
+		    margin-left: auto;
+		}
+		
+		.dropdown-menu {
+    max-width: 250px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 5px 0;
+    border: none;
+}
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.dropdown-item i {
+    width: 20px;
+    text-align: center;
+}
+.dropdown-item span {
+	color: black;
+}
+
+		
+		.category-links a {
+		    display: flex;
+		    align-items: center;
+		    background: #f1f1f1;
+		    padding: 10px 15px;
+		    border-radius: 8px;
+		    text-decoration: none;
+		    color: black;
+		    font-weight: bold;
+		    transition: background 0.3s ease-in-out;
+		}
+		.category-links a span {
+		    
+		    color: black;
+		    
+		}
+		
+		
+		
+		
+		.category-links a img {
+		    width: 30px;
+		    height: 30px;
+		    margin-right: 8px;
+		}
+		
+		.category-links a:hover {
+		    background: #e0e0e0;
+		}
+		.cart-btn {
+		    display: flex;
+		    align-items: center;
+		    border: 2px solid white;
+		    padding: 8px 16px;
+		    border-radius: 8px;
+		    font-size: 14px;
+		    font-weight: bold;
+		    color: white;
+		    text-decoration: none;
+		    transition: all 0.3s ease-in-out;
+		    background: transparent;
+		    gap: 10px; /* Tạo khoảng cách giữa icon, text và badge */
+		}
+		
+		.cart-btn .cart-badge {
+		    background: white;
+		    color: #007AFF;
+		    font-size: 14px;
+		    font-weight: bold;
+		    padding: 3px 8px;
+		    border-radius: 5px;
+		    min-width: 24px;
+		    text-align: center;
+		}
+
+		.cart-btn span {
+			font-weight: bold;
+   			text-decoration: none;
+		
+		}
+		
+		.cart-btn i {
+		    font-size: 18px;
+		    margin-right: 8px;
+		    
+		}
+		
+		
+		
+		.cart-btn:hover {
+		    background: rgba(255, 255, 255, 0.2);
+		}
+		
+		
+		/* BANNER */
+		
+		.category-menu-banner {
+            max-width: 250px;
+		    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+		    border-radius: 10px;
+		    padding: 5px 0;
+		    border: none;
+        }
+        .category-menu-banner span {
+            color: black;
+            margin-left: 5px;
+            font-size: 15.75px;
+            
+            font-family: Roboto, -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, Arial, sans-serif;
+        }
+        
+
+        .category-menu-banner a {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            color: #333;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .category-menu-banner a:hover {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .category-menu-banner i {
+            width: 24px;
+            text-align: center;
+            margin-right: 10px;
+            color: #333;
+        }
+
+        .banner-section img {
+            border-radius: 10px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .grid-banners img {
+            border-radius: 10px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .grid-banners .col {
+            padding: 10px;
+        }
+        .banner-section {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.grid-banners img {
+    border-radius: 10px;
+    width: 100%;
+    object-fit: cover;
+    
+}
+
+.carousel-inner img {
+    width: 100%;
+    height: 318px; /* Đặt chiều cao cố định */
+    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+    border-radius: 10px;
+    transition: transform 0.5s ease-in-out; /* Hiệu ứng chuyển đổi mượt hơn */
+}
+
+.carousel-item {
+	width: 100%;
+    border-radius: 10px; /* Bo góc 10px */
+    overflow: hidden; /* Giữ ảnh không bị lấn ra ngoài */
+}
+.carousel-item img {
+	width: 100%;
+    border-radius: 10px; /* Bo góc 10px */
+    
+}
+
+.carousel-item.active img {
+   
+    border-radius: 10px;
+}
+.carousel-inner {
+    overflow: hidden;
+}
+
+.carousel-item {
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+    opacity: 0;
+    transform: scale(0.95); /* Ban đầu thu nhỏ ảnh */
+}
+
+.carousel-item.active {
+    opacity: 1;
+    transform: scale(1); /* Phóng to nhẹ nhàng khi chuyển ảnh */
+}
+
+
+.carousel-inner {
+    transition: transform 1s ease-in-out;
+}
+.carousel-control-prev{
+	border-radius: 10px;
+	border: none;
+	color: none;
+}
+.carousel-control-next{
+	border-radius: 10px;
+	border: none;
+}
+.banner-section img {
+            border-radius: 10px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .grid-banners img {
+            border-radius: 10px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .grid-banners .col {
+            padding: 10px;
+        }
+        .banner-section {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.grid-banners img {
+    border-radius: 10px;
+    width: 100%;
+    object-fit: cover;
+}
+
+
+.carousel-indicators btn{
+	
+}
+
+
+
+/* cart */
+
+
+
+
+
+h2 {
+    font-weight: bold;
+    color: #333;
+}
+
+.card {
+   	border: none;
+    box-shadow: none; /* Bỏ viền */
+    transition: transform 0.2s ease-in-out;
+    overflow: hidden;
+}
+
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.card-title {
+    font-size: 14px;
+    
+    color: #000; /* Chữ đen */
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #d9534f;
+}
+
+.text-muted {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.badge {
+    font-size: 0.8rem;
+    padding: 5px 8px;
+}
+
+.row-cols-md-4 .col {
+    display: flex;
+    align-items: stretch;
+}
+

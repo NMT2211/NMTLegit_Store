@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<!-- Fragment Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="adminNavbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/admin">
+            <i class="fa-solid fa-user-shield"></i> Admin Panel
+        </a>
+
+        <!-- Nút Toggle Mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${page == 'home' ? 'active' : ''}" href="/admin">
+                        <i class="fa-solid fa-home"></i> Trang Chủ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${page == 'category' ? 'active' : ''}" href="/admin/category">
+                        <i class="fa-solid fa-list"></i> Quản Lý Danh Mục
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${page == 'product' ? 'active' : ''}" href="/admin/product">
+                        <i class="fa-solid fa-box"></i> Quản Lý Sản Phẩm
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${page == 'orders' ? 'active' : ''}" href="/admin/orders">
+                        <i class="fa-solid fa-file-invoice"></i> Quản Lý Đơn Hàng
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${page == 'users' ? 'active' : ''}" href="/admin/users">
+                        <i class="fa-solid fa-users"></i> Quản Lý Người Dùng
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Khu vực Đăng Xuất -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link btn btn-danger text-white" href="/logout">
+                        <i class="fa-solid fa-sign-out-alt"></i> Đăng Xuất
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý Danh Mục</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+<div th:replace="~{admin/layout/navbar :: adminNavbar}"></div>
+    <div class="container mt-4" th:fragment="danhMucAdmin">
+    
+        <h2 class="text-center">Quản lý Danh Mục</h2>
+        
+        <!-- Form Thêm/Cập nhật Danh Mục -->
+        <form th:action="@{/admin/category/save}" method="post" th:object="${danhMuc}" class="mb-4" enctype="multipart/form-data">
+		    <div class="mb-3">
+		        <label class="form-label">Mã Danh Mục</label>
+		        <input type="text" class="form-control" th:field="*{maDanhMuc}" required>
+		    </div>
+		    <div class="mb-3">
+		        <label class="form-label">Tên Danh Mục</label>
+		        <input type="text" class="form-control" th:field="*{tenDanhMuc}" required>
+		    </div>
+		    <div class="mb-3">
+		        <label class="form-label">Chọn Hình Ảnh</label>
+		        <input type="file" class="form-control" name="imageFile">
+		    </div>
+		    <div class="mb-3">
+		        <label class="form-label">Icon (FontAwesome)</label>
+		        <input type="text" class="form-control" th:field="*{icon}"
+		            th:attr="placeholder='Ví dụ: <i class=&quot;fa-solid fa-file-shield&quot; style=&quot;color: #878787;&quot;></i>'">
+		    </div>
+		    <button type="submit" class="btn btn-success">Lưu</button>
+		    <button type="reset" class="btn btn-secondary">Reset</button>
+		    <a th:if="*{maDanhMuc} != null" href="/admin/category" class="btn btn-danger">Cancel</a>
+		</form>
+
+
+        <!-- Bảng Danh Mục -->
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Mã Danh Mục</th>
+                    <th>Tên Danh Mục</th>
+                    <th>Hình Ảnh</th>
+                    <th>Icon</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${categories}">
+                    <td th:text="${item.maDanhMuc}"></td>
+                    <td th:text="${item.tenDanhMuc}"></td>
+                    <td>
+                        <img th:src="@{'/images/categories/' + ${item.hinhAnh}}" alt="Hình ảnh" style="width:200px; height: auto;">
+						
+                    </td>
+                    <td th:utext="${item.icon}" class="text-center"></td>
+                    <td>
+                        <a th:href="@{/admin/category/edit/{id}(id=${item.maDanhMuc})}" class="btn btn-warning btn-sm">Sửa</a>
+                        <a th:href="@{/admin/category/delete/{id}(id=${item.maDanhMuc})}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?');">Xóa</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    
+    
+    
+  
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+</body>
+</html>

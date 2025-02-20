@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Divine Shop - Phần mềm bản quyền</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            
+            color: white;
+        }
+        .navbar, .top-bar, .user-options a {
+            
+            color: white !important;
+        }
+        .navbar a, .user-options a {
+            color: white !important;
+        }
+        .cart {
+           
+            color: white !important;
+        }
+        .search-bar input {
+            
+            color: white;
+            border: 1px solid white;
+        }
+        .product-container h2{
+        	color: black;
+        }
+        .product-container p{
+        	color: black;
+        }
+        
+    </style>
+</head>
+<body>
+    <header>
+        <div class="top-bar bg-primary text-white py-2">
+            <div class="container d-flex justify-content-between">
+                <div>
+                    <a href="#" class="text-white"><i class="fas fa-shield-alt"></i> Bảo vệ máy tính của bạn</a>
+                </div>
+                <div>
+                    <a href="#" class="text-white mx-2"><i class="fas fa-book"></i> Hướng dẫn mua hàng</a>
+                    <a href="#" class="text-white mx-2"><i class="fas fa-gift"></i> Ưu đãi khách hàng</a>
+                    <a href="#" class="text-white mx-2"><i class="fas fa-phone"></i> Thông tin liên hệ</a>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-blue">
+            <div class="container">
+                <a class="navbar-brand" th:href="@{/}">
+                    <img th:src="@{/images/logo.svg}" alt="Divine Shop" height="40">
+                    NMTLegit Store
+                </a>
+                <form class="search-bar mx-auto">
+                    <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                </form>
+                <div class="user-options d-flex align-items-center">
+                    <a href="#" class="text-white mx-3"><i class="fas fa-user"></i> Đăng nhập / Đăng ký</a>
+                    <a href="#" class="btn btn-outline-light cart">
+                        <i class="fas fa-shopping-cart"></i> Giỏ hàng <span class="badge badge-light">0</span>
+                    </a>
+                </div>
+            </div><br>
+            
+            
+        </nav>
+        <div class="container d-flex justify-content-between py-2">
+            <a href="#" class="text-white"><i class="fas fa-eye"></i> Sản phẩm bạn vừa xem</a>
+            <a href="#" class="text-white"><i class="fas fa-fire"></i> Sản phẩm mua nhiều</a>
+            <a href="#" class="text-white"><i class="fas fa-percent"></i> Sản phẩm khuyến mại</a>
+            <a href="#" class="text-white"><i class="fas fa-briefcase"></i> Tuyển dụng</a>
+            <a href="#" class="text-white"><i class="fas fa-credit-card"></i> Hình thức thanh toán</a>
+        </div>
+    </header>
+    <div class="product-container">
+        <h2>Sản phẩm nổi bật</h2>
+        <p>Danh sách những sản phẩm theo xu hướng mà có thể bạn sẽ thích</p>
+        <div class="product-grid">
+            <a th:href="@{/view/chitietsp.html}" class="product-link">
+			    <div class="product-item">
+			        <img th:src="@{/images/sp1.png}" alt="Zoom Pro">
+			        <div class="product-name">Zoom Pro ~1 tháng (28 ngày)</div>
+			        <div class="product-price">
+			            210.000đ <span class="product-old-price">350.000đ</span> 
+			            <span class="discount-badge">-40%</span>
+			        </div>
+			    </div>
+			</a>
+
+            <div class="product-item">
+                <img th:src="@{/images/sp2.png}" alt="Windows 10">
+                <div class="product-name">Windows 10 Professional - CD Key</div>
+                <div class="product-price">290.000đ <span class="product-old-price">400.000đ</span> <span class="discount-badge">-28%</span></div>
+            </div>
+            <div class="product-item">
+                <img th:src="@{/images/sp3.png}" alt="YouTube Premium">
+                <div class="product-name">YouTube Premium 1 năm</div>
+                <div class="product-price">599.000đ <span class="product-old-price">6.720.000đ</span> <span class="discount-badge">-91%</span></div>
+            </div>
+            <div class="product-item">
+                <img th:src="@{/images/sp4.png}" alt="Canva Pro">
+                <div class="product-name">Canva Pro 1 năm</div>
+                <div class="product-price">295.000đ <span class="product-old-price">1.500.000đ</span> <span class="discount-badge">-80%</span></div>
+            </div>
+
+                <div class="product-item">
+                    <img th:src="@{/images/sp5.png}" alt="Zoom Pro">
+                    <h3 class="product-name">Zoom Pro ~1 tháng (28 ngày) - Gói nâng cấp</h3>
+                    <div class="product-price">210.000đ  <span class="product-old-price">350.000đ</span> <span class="discount-badge">-40%</span></div>
+                </div>
+                <div class="product-item">
+                    <img th:src="@{/images/sp6.png}" alt="Windows 10">
+                    <h3 class="product-name">Windows 10 Professional - CD Key</h3>
+    
+                    <div class="product-price">290.000đ  <span class="product-old-price">400.000đ</span> <span class="discount-badge">-28%</span></div>
+                </div>
+                <div class="product-item">
+                    <img th:src="@{/images/sp7.png}" alt="YouTube Premium">
+                    <h3 class="product-name">YouTube Premium + YouTube Music 1 năm</h3>
+                    <div class="product-price">599.000đ <span class="product-old-price">6.720.000đ</span> <span class="discount-badge">-91%</span></div>
+
+                </div>
+                <div class="product-item">
+                    <img th:src="@{/images/sp8.png}" alt="Canva Pro">
+                    <h3 class="product-name">Canva Pro 1 năm - Gia hạn chính chủ</h3>
+                    <div class="product-price">295.000đ <span class="product-old-price">1.500.000đ</span> <span class="discount-badge">-80%</span></div>
+                </div>
+        
+        </div>
+    </div>
+    
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
