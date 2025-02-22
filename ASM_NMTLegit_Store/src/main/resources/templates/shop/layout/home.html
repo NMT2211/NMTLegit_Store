@@ -16,7 +16,8 @@
     
         <div class="col" th:each="product : ${products}">
     <div class="card">
-        <a th:href="@{/view/chitietsp.html}" class="text-decoration-none">
+        <a th:href="@{/NMTLegit_Store/chitietsp/{id}(id=${product.maSanPham})}" class="text-decoration-none">
+
             <img th:src="@{/images/sp1.png}" class="card-img-top round" alt="Zoom Pro">
             
             <!-- Hiển thị nhiều ảnh -->

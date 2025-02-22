@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Sản Phẩm</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+   
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <link rel="stylesheet" href="/css/shop/navshop.css">
+    <th:block th:each="category : ${categories}">
+	    <link rel="preload" as="image" th:href="@{'/images/categories/' + ${category.hinhAnh}}">
+	</th:block>
+    
+    <style>
+        
+        .carousel-item img{
+        	width: 100%;
+            height: auto;
+            transition: transform 0.1s ease-in-out;
+        
+        }
+        .discount-badge {
+            background-color: red;
+            color: white;
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+         .price-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .current-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: black;
+        }
+        .original-price {
+            font-size: 1rem;
+            text-decoration: line-through;
+            color: grey;
+        }
+        .alert{
+        	margin-top: 50px;
+        }
+        
+    </style>
+</head>
+<body>
+	<div th:replace="~{shop/layout/navbar :: shopNavbar}"></div>
+    <div class="container mt-4">
+        <div class="row" th:if="${product != null}">
+            <!-- Slideshow hình ảnh sản phẩm -->
+            <div class="col-md-4">
+                <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div th:each="image, iterStat : ${product.hinhAnhs}" class="carousel-item" th:classappend="${iterStat.index == 0} ? 'active' : ''">
+                            <img th:src="@{'/images/products/' + ${image.duongDanHinh}}" class="d-block product-image rounded" alt="Hình ảnh sản phẩm">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Thông tin sản phẩm -->
+            <div class="col-md-5">
+                <h3 th:text="${product.tenSanPham}"></h3>
+                <p class="text-success" th:text="${product.tonKho > 0 ? 'Tình trạng: Còn hàng' : 'Tình trạng: Hết hàng'}"></p>
+                <p><strong>Mã sản phẩm: </strong><span th:text="${product.maSanPham}"></span></p>
+                <p><strong>Thể loại: </strong></p>
+                <div class="price-container">
+                    <span class="current-price" th:text="${#numbers.formatDecimal(product.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + '₫'"></span><br>
+                    <span class="original-price" th:if="${product.gia > product.giaKhuyenMai}" th:text="${#numbers.formatDecimal(product.gia, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
+                    <span class="discount-badge" th:if="${product.gia > product.giaKhuyenMai}" th:text="${'-' + #numbers.formatDecimal((1 - (product.giaKhuyenMai / product.gia)) * 100, 0, 'COMMA', 0, 'POINT') + '%'}"></span>
+                </div>
+                
+                <!-- Nút Mua Ngay và Thêm vào giỏ hàng -->
+                <form th:action="@{/cart/add}" method="post" class="d-flex gap-2 mt-5">
+                    <input type="hidden" name="productId" th:value="${product.maSanPham}">
+                    <button type="submit" class="btn btn-primary flex-grow-1"><i class="fas fa-credit-card"></i> Mua ngay</button>
+                    <button type="button" class="btn btn-outline-primary flex-grow-1"><i class="fas fa-shopping-cart"></i> Thêm vào giỏ</button>
+                </form>
+            </div>
+            <div class="col-md-3">
+                <h5>Giới thiệu bạn bè</h5>
+                <p>Giảm giá 5% cho bạn bè được giới thiệu.</p>
+                <div class="input-group">
+                    <input type="text" class="form-control" value="https://divineshop.vn" readonly>
+                    <button class="btn btn-primary"><i class="fas fa-copy"></i></button>
+                    <button class="btn btn-outline-primary"><i class="fas fa-code"></i></button>
+                </div>
+                <a href="#" class="text-primary d-block mt-2"><i class="fas fa-info-circle"></i> Xem chi tiết</a>
+            </div>
+        </div>
+        
+       <div class="alert alert-info mt-8">
+                <strong>Lưu ý:</strong>
+                <p th:text="${product.moTaChinh}"></p>
+                <p th:text="${product.chiTietSanPham}"></p>
+                <p><strong>Cấu hình:</strong> <span th:text="${product.cauHinh}"></span></p>
+                <p><strong>Chính sách bảo hành:</strong> <span th:text="${product.chinhSachBaoHanh}"></span></p>
+                <p><strong>Câu hỏi thường gặp:</strong> <span th:text="${product.cauHoiThuongGap}"></span></p>
+       </div>
+                
+
+        <!-- Trường hợp không tìm thấy sản phẩm -->
+        <div class="alert alert-danger text-center" th:unless="${product != null}">
+            Sản phẩm không tồn tại hoặc đã bị xoá.
+        </div>
+    </div>
+</body>
+</html>

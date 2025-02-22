@@ -1,62 +1,63 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:text="${product.name} + ' - Chi tiết sản phẩm'"></title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Sản Phẩm</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        .product-image {
+            max-width: 100%;
+            height: auto;
+        }
+        .discount-badge {
+            background-color: red;
+            color: white;
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-4">
-        <section class="product-detail d-flex">
-            <div class="product-image">
-                <img th:src="@{/images/{img}(img=${product.image})}" alt="Zoom Pro" class="img-fluid rounded">
-                <p><a href="#">Xem thêm ảnh</a></p>
+
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Hình ảnh sản phẩm -->
+            <div class="col-md-5">
+                <img src="/images/product.png" alt="Zoom Pro" class="product-image rounded">
             </div>
-            <div class="product-info ml-4">
-                <h1 th:text="${product.name}"></h1>
-                <p class="status">Tình trạng: <span class="in-stock" th:text="${product.stock > 0 ? 'Còn hàng' : 'Hết hàng'}"></span></p>
-                <p class="product-code">Mã sản phẩm: <strong th:text="${product.code}"></strong></p>
-                <p class="category">Thể loại: <span th:text="${product.category}"></span></p>
-                <p class="price">
-                    <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + 'đ'"></span>
-                    <span class="old-price" th:text="${#numbers.formatDecimal(product.oldPrice, 0, 'COMMA', 0, 'POINT')} + 'đ'"></span>
-                    <span class="discount" th:text="'-' + ${product.discount} + '%'" style="background: red; color: white; padding: 2px 6px; border-radius: 5px;"></span>
+
+            <!-- Thông tin sản phẩm -->
+            <div class="col-md-7">
+                <h2>Zoom Pro ~1 tháng (28 ngày) - Gói nâng cấp</h2>
+                <p class="text-success">Tình trạng: Còn hàng</p>
+                <p><strong>Thể loại:</strong> App, Làm việc, Học tập</p>
+                <p class="text-danger fw-bold">
+                    <span>210.000₫</span>
+                    <span class="text-decoration-line-through text-muted">350.000₫</span>
+                    <span class="discount-badge">-40%</span>
                 </p>
-                
-                <h3>Chọn gói nâng cấp</h3>
-                <div class="upgrade-options">
-                    <button th:each="option : ${product.options}" th:text="${option}"></button>
+
+                <!-- Chọn gói nâng cấp -->
+                <h5>Chọn gói nâng cấp</h5>
+                <div class="btn-group mb-3">
+                    <button class="btn btn-outline-primary">14 Ngày</button>
+                    <button class="btn btn-primary">28 Ngày</button>
+                    <button class="btn btn-outline-secondary">1 Tháng (300 TV)</button>
                 </div>
-                
-                <h3>Nhập thông tin bổ sung</h3>
-                <input type="text" placeholder="Email đăng ký Zoom" required>
-                <input type="password" placeholder="Mật Khẩu" required>
-                <input type="text" placeholder="Số điện thoại" required>
-                
-                <div class="purchase-buttons mt-3">
-                    <button class="buy-now btn btn-primary">🛒 Mua ngay</button>
-                    <button class="add-to-cart btn btn-warning">🛍️ Thêm vào giỏ</button>
-                </div>
+
+                <!-- Nhập thông tin bổ sung -->
+                <h5>Nhập thông tin bổ sung</h5>
+                <input type="email" class="form-control" placeholder="Email đăng ký Zoom">
+
+                <!-- Nút mua hàng -->
+                <button class="btn btn-success mt-3 w-100">Mua ngay</button>
             </div>
-        </section>
-        
-        <section class="product-details mt-4">
-            <h2>Chi tiết sản phẩm</h2>
-            <h3>Quy trình nhận hàng</h3>
-            <p th:each="step : ${product.steps}" th:text="${step}"></p>
-            
-            <h3>Nâng cấp trải nghiệm họp trực tuyến với Zoom Pro</h3>
-            <p th:text="${product.description}"></p>
-            
-            <h3>Chính sách bảo hành</h3>
-            <p>- Thời gian bảo hành: <span th:text="${product.warranty} + ' ngày'"></span>.</p>
-            <p>- Đổi mới trong trường hợp tài khoản bị lỗi.</p>
-            <p>- Hoàn tiền 100% nếu chưa sử dụng quá 7 ngày.</p>
-        </section>
+        </div>
     </div>
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
