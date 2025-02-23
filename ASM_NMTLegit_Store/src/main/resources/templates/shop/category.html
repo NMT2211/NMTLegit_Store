@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${category.tenDanhMuc} + ' | Divine Shop'">Category Page | Divine Shop</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+   
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <link rel="stylesheet" href="/css/shop/navshop.css">
+    <th:block th:each="category : ${categories}">
+	    <link rel="preload" as="image" th:href="@{'/images/categories/' + ${category.hinhAnh}}">
+	</th:block>
+	
+	<style>
+	.card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .card-body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+   
+	
+	.filter-search-container {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 1.5rem;
+}
+
+/* CSS cho form lọc theo giá */
+.filter-form {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	background: #fff;
+	padding: 10px 15px;
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Style cho select trong form lọc */
+.filter-form select {
+	padding: 8px 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 1rem;
+	background-color: #fdfdfd;
+}
+
+/* CSS cho form tìm kiếm */
+.search-form {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	background: #fff;
+	padding: 10px 15px;
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Style cho input tìm kiếm */
+.search-form input[type="text"] {
+	padding: 8px 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 1rem;
+	width: 250px;
+}
+
+/* Style cho button tìm kiếm */
+.search-form button {
+	padding: 8px 16px;
+	background-color: #0052cc;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 1rem;
+	transition: background-color 0.2s ease;
+}
+
+.search-form button:hover {
+	background-color: #003a99;
+}
+
+.filter-search-container {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	margin-bottom: 1.5rem;
+}
+
+.filter-form, .search-form {
+	/* Mỗi form chiếm 50% chiều rộng (tùy chỉnh) */
+	flex: 1;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	background: #fff;
+	padding: 10px 15px;
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Form lọc theo giá */
+.filter-form select {
+	flex: 1;
+	padding: 8px 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 1rem;
+	background-color: #fdfdfd;
+}
+
+/* Form tìm kiếm */
+.search-form input[type="text"] {
+	flex: 1; /* cho input chiếm hết phần còn lại */
+	padding: 8px 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 1rem;
+}
+
+.search-form button {
+	padding: 8px 16px;
+	background-color: #0052cc;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 1rem;
+	transition: background-color 0.2s ease;
+}
+
+.search-form button:hover {
+	background-color: #003a99;
+}
+	</style>
+</head>
+<body class="bg-light">
+    <div th:replace="~{shop/layout/navbar :: shopNavbar}"></div>
+
+    <div class="container mt-4">
+        <!-- Danh mục tiêu đề -->
+        <div class="text-center p-4 bg-white shadow-sm rounded">
+            <h1 class="fw-bold" th:text="${category.tenDanhMuc}">Tên danh mục</h1>
+            <p class="text-muted">Danh sách sản phẩm thuộc danh mục <span th:text="${category.tenDanhMuc}"></span></p>
+        </div>
+
+        
+		<div class="filter-search-container">
+		
+			<form action="/NMTLegit_Store/filter" method="get"
+				class="filter-form">
+				<input type="hidden" name="categoryId" id="categoryId"
+					th:value="${category.maDanhMuc}"> <label for="priceRange">Lọc
+					theo giá:</label> <select id="priceRange" name="priceRange"
+					onchange="submitForm()">
+					<option value="">Chọn khoảng giá</option>
+					<option value="0-99000">0 - 99.000₫</option>
+					<option value="100000-199000">100.000₫ - 199.000₫</option>
+					<option value="200000-499000">200.000₫ - 499.000₫</option>
+					<option value="500000-999000">500.000₫ - 999.000₫</option>
+					<option value="1000000-999999999">1.000.000₫ trở lên</option>
+				</select> <input type="hidden" name="minPrice" id="minPrice"> <input
+					type="hidden" name="maxPrice" id="maxPrice">
+			</form>
+
+			<form action="/NMTLegit_Store/searchByCategory" method="get"
+				class="search-form">
+				<input type="hidden" name="categoryId" id="categoryId"
+					th:value="${category.maDanhMuc}"> <input type="text"
+					name="searchTerm" placeholder="Nhập tên sản phẩm cần tìm..."
+					required>
+				<button type="submit">Tìm kiếm</button>
+			</form>
+		</div>
+        <!-- Danh sách sản phẩm -->
+        <div th:if="${#lists.isEmpty(products)}" class="alert alert-warning text-center">
+            Không có sản phẩm nào
+        </div>
+        
+        <div th:if="${!#lists.isEmpty(products)}" class="row g-4">
+            <div th:each="product : ${products}" class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="product-image text-center p-3">
+                        <img th:if="${product.hinhAnhs != null and !product.hinhAnhs.isEmpty()}"
+                             th:src="@{'/images/products/' + ${product.hinhAnhs.get(0).duongDanHinh}}"
+                             class="img-fluid rounded" alt="Product Image">
+                        <img th:if="${product.hinhAnhs == null or product.hinhAnhs.isEmpty()}"
+                             th:src="@{/images/sp2.png}" class="img-fluid rounded" alt="Default Image">
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="fw-bold" th:text="${product.tenSanPham}"></h5>
+                        <p class="text-danger fw-bold fs-5" th:text="${#numbers.formatDecimal(product.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                        <p class="text-muted text-decoration-line-through" th:text="${#numbers.formatDecimal(product.gia, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                        <a th:href="@{/NMTLegit_Store/chitietsp/{id}(id=${product.maSanPham})}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-shopping-cart text-dark"></i> <span class="text-dark">Mua ngay</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    function submitForm() {
+        let priceRange = document.getElementById("priceRange").value;
+        if (!priceRange) return;
+        
+        let [min, max] = priceRange.split("-");
+        document.getElementById("minPrice").value = min;
+        document.getElementById("maxPrice").value = max || 999999999;
+        
+        document.querySelector(".filter-form").submit();
+    }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

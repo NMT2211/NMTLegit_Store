@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Giỏ hàng</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/shop/navshop.css">
+    
+    <style>
+        .cart-card {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            transition: transform 0.2s ease-in-out;
+        }
+        .cart-card:hover {
+            transform: scale(1.02);
+        }
+        .cart-product-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .cart-total-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .btn-outline-secondary {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .price-discount {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #dc3545;
+        }
+        .price-original {
+            font-size: 0.9rem;
+            color: #6c757d;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{shop/layout/navbar :: shopNavbar}"></div>
+
+<div class="container mt-5">
+    <h2 class="fw-bold text-center mb-4">🛒 Giỏ hàng của bạn (<span th:text="${cart.size()}"></span> sản phẩm)</h2>
+    
+    <div class="row">
+        <!-- Danh sách sản phẩm -->
+        <div class="col-md-8">
+            <div th:each="cartItem : ${cart}" class="card cart-card mb-3 p-3 shadow-sm">
+                <div class="d-flex align-items-center">
+                   <img th:src="@{'/images/products/' + ${cartItem.maSanPham.danhMuc.hinhAnh}}" 
+                         class="rounded" width="150" height="100">
+                    <div class="flex-grow-1">
+                        <h5 class="fw-bold" th:text="${cartItem.maSanPham.tenSanPham}"></h5>
+                        <p class="text-muted mb-1">🎭 <span th:text="${cartItem.maSanPham.danhMuc.tenDanhMuc}"></span></p>
+                        <p class="text-success fw-bold mb-1">✔ Còn hàng</p>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-outline-secondary me-2" 
+                                th:onclick="|updateQuantity(${cartItem.maGioHang}, ${cartItem.soLuong - 1}, ${cartItem.maNguoiDung.maNguoiDung})|">-</button>
+                        <span class="fw-bold" th:text="${cartItem.soLuong}"></span>
+                        <button class="btn btn-outline-secondary ms-2" 
+                                th:onclick="|updateQuantity(${cartItem.maGioHang}, ${cartItem.soLuong + 1}, ${cartItem.maNguoiDung.maNguoiDung})|">+</button>
+                    </div>
+                    <div class="text-end ms-3">
+                        <p class="price-discount" th:text="${#numbers.formatDecimal(cartItem.maSanPham.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                        <p class="price-original" th:text="${#numbers.formatDecimal(cartItem.maSanPham.gia, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                    </div>
+                    <button class="btn btn-danger ms-3" th:onclick="|removeFromCart(${cartItem.maGioHang}, ${cartItem.maNguoiDung.maNguoiDung})|">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thông tin thanh toán -->
+        <div class="col-md-4">
+            <div class="cart-total-card shadow-sm">
+                <h5 class="fw-bold mb-3">🛍 Thông tin thanh toán</h5>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">📞 Số điện thoại liên hệ</label>
+                    <input type="text" class="form-control" id="phoneNumber" th:value="${cart[0].maNguoiDung.soDienThoai}" readonly>
+                </div>
+                <hr>
+                <p class="fw-bold fs-5">💰 Tổng tiền: 
+                    <span class="text-danger" th:text="${#numbers.formatDecimal(cartTotal, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
+                </p>
+                <button class="btn btn-primary w-100 mb-2">🔄 Nạp thêm vào tài khoản</button>
+                <button class="btn btn-success w-100 mb-2">🏦 Thanh toán qua Mobile Banking</button>
+                <button class="btn btn-danger w-100">💳 Thanh toán bằng MoMo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function updateQuantity(cartId, quantity, userId) {
+        if (quantity < 1) return removeFromCart(cartId, userId);
+        fetch('/gio-hang/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `cartId=${cartId}&quantity=${quantity}&userId=${userId}`
+        }).then(() => location.reload());
+    }
+
+    function removeFromCart(cartId, userId) {
+        fetch('/gio-hang/remove', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `cartId=${cartId}&userId=${userId}`
+        }).then(() => location.reload());
+    }
+</script>
+
+</body>
+</html>

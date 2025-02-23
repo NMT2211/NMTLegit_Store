@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng nhập / Đăng ký</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card p-4" style="width: 400px;">
+            <h2 class="text-center mb-4" th:text="${isLogin ? 'Đăng Nhập' : 'Đăng Ký'}"></h2>
+            
+            <!-- Hiển thị thông báo lỗi/thành công -->
+            <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+            <div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"></div>
+            
+            <form th:action="@{${isLogin ? '/auth/login' : '/auth/register'}}" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Tên đăng nhập</label>
+                    <input type="text" name="username" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Mật khẩu</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100" th:text="${isLogin ? 'Đăng Nhập' : 'Đăng Ký'}"></button>
+            </form>
+            
+            <p class="text-center mt-3">
+                <span th:text="${isLogin ? 'Chưa có tài khoản?' : 'Đã có tài khoản?'}"></span>
+                <a th:href="@{${isLogin ? '/register' : '/login'}}" class="text-primary" th:text="${isLogin ? 'Đăng ký' : 'Đăng nhập'}"></a>
+            </p>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
