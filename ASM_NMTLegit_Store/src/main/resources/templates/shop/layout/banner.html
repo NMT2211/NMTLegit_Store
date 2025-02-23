@@ -17,7 +17,7 @@
             <!-- Danh mục sản phẩm -->
             <div class="col-md-3">
                 <div class="category-menu-banner">
-                    <a th:each="category : ${categories}" th:href="@{#}" class="category-item">
+                    <a th:each="category : ${categories}" th:href="@{/NMTLegit_Store/category/{id}(id=${category.maDanhMuc})}" class="category-item">
                         <span th:utext="${category.icon}"></span>
                         <span th:text="${category.tenDanhMuc}"></span>
                     </a>
@@ -41,7 +41,10 @@
 				    <!-- Slideshow chính -->
 				    <div class="carousel-inner">
 					    <div th:each="category, iterStat : ${categories}" class="carousel-item" th:classappend="${iterStat.first} ? 'active'">
-					        <img th:src="@{'/images/categories/' + ${category.hinhAnh}}" class="d-block w-100" th:alt="${category.tenDanhMuc}">
+					    	<a th:href="@{/NMTLegit_Store/category/{id}(id=${category.maDanhMuc})}">
+					    		<img th:src="@{'/images/categories/' + ${category.hinhAnh}}" class="d-block w-100" th:alt="${category.tenDanhMuc}">
+					    	</a>
+					        
 					    </div>
 					</div>
 

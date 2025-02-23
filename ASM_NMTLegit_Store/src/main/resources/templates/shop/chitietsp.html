@@ -89,11 +89,15 @@
                 </div>
                 
                 <!-- Nút Mua Ngay và Thêm vào giỏ hàng -->
-                <form th:action="@{/cart/add}" method="post" class="d-flex gap-2 mt-5">
-                    <input type="hidden" name="productId" th:value="${product.maSanPham}">
-                    <button type="submit" class="btn btn-primary flex-grow-1"><i class="fas fa-credit-card"></i> Mua ngay</button>
-                    <button type="button" class="btn btn-outline-primary flex-grow-1"><i class="fas fa-shopping-cart"></i> Thêm vào giỏ</button>
-                </form>
+                <form class="d-flex gap-2 mt-5">
+				    <input type="hidden" id="quantity-input" value="1">
+				    <button type="button" class="btn btn-primary flex-grow-1"><i class="fas fa-credit-card"></i> Mua ngay</button>
+				    <button type="button" class="btn btn-outline-primary flex-grow-1 add-to-cart" th:attr="data-product-id=${product.maSanPham}">
+				        <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
+				    </button>
+				</form>
+                <div id="cart-message" class="alert alert-success mt-2 d-none"></div>
+                
             </div>
             <div class="col-md-3">
                 <h5>Giới thiệu bạn bè</h5>
@@ -121,6 +125,84 @@
         <div class="alert alert-danger text-center" th:unless="${product != null}">
             Sản phẩm không tồn tại hoặc đã bị xoá.
         </div>
+        
+        
     </div>
+    <!-- Thông báo toast -->
+		<div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1050;">
+		    <div id="cart-toast" class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+		        <div class="d-flex">
+		            <div class="toast-body">
+		                <span id="toast-message">Sản phẩm đã được thêm vào giỏ hàng.</span>
+		            </div>
+		            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+		        </div>
+		    </div>
+		</div>
+        
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".add-to-cart").forEach(button => {
+            button.addEventListener("click", function (event) {
+                event.preventDefault();
+
+                let productId = this.getAttribute("data-product-id");
+                let quantity = document.getElementById("quantity-input")?.value || 1;
+
+                console.log("Mã sản phẩm:", productId);
+                console.log("Số lượng:", quantity);
+                
+                fetch("/gio-hang/add", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: `productId=${productId}&quantity=${quantity}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    let toastElement = document.getElementById("cart-toast");
+                    let toastMessage = document.getElementById("toast-message");
+                    let toast = new bootstrap.Toast(toastElement);
+
+                    // Cập nhật nội dung thông báo
+                    toastMessage.textContent = data.message;
+
+                    // Đổi màu nền tùy theo trạng thái
+                    if (data.status === "success") {
+                        toastElement.classList.remove("bg-danger");
+                        toastElement.classList.add("bg-success");
+
+                        // Hiển thị thông báo
+                        toast.show();
+
+                        // Cập nhật số lượng giỏ hàng trên navbar
+                        updateCartCount();
+                    } else {
+                        toastElement.classList.remove("bg-success");
+                        toastElement.classList.add("bg-danger");
+                        toast.show();
+                    }
+                })
+                .catch(error => console.error("Lỗi:", error));
+            });
+        });
+
+        // Hàm cập nhật số lượng giỏ hàng
+        function updateCartCount() {
+            fetch("/gio-hang/count")
+            .then(response => response.json())
+            .then(data => {
+                let cartBadge = document.querySelector(".cart-badge");
+                if (cartBadge) {
+                    cartBadge.textContent = data.count; // Cập nhật số lượng trên navbar
+                }
+            })
+            .catch(error => console.error("Lỗi khi cập nhật số lượng giỏ hàng:", error));
+        }
+    });
+
+
+</script>
 </body>
 </html>

@@ -33,23 +33,45 @@
                     <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm">
                     <button type="submit"><i class="fas fa-search"></i></button>
                 </form>
-                <div class="user-options d-flex align-items-center">
-				    <button type="button" class="btn btn-light d-flex align-items-center">
-				        <i class="fa-solid fa-user-large"></i>
-				    </button>
-				    <div class="d-flex align-items-center mx-2">
-				        <a href="#">Đăng nhập</a>
-				        <span class="mx-1">/</span>
-				        <a href="#">Đăng ký</a>
+                
+				<div class="user-options d-flex align-items-center">
+					
+
+				    <div class="dropdown" th:if="${session.username}">
+				        <button class="" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false"
+				        	style="background: none; border: none; padding-right:50px;"
+				        >
+				            <img src="/images/default-avatar.png" alt="Avatar" class="rounded-circle" width="40" height="40">
+				            <span class="fw-bold ms-2" th:text="${session.username}"></span>
+				        </button>
+				       <ul class="dropdown-menu dropdown-menu-end text-dark" aria-labelledby="userMenu">
+						    <li><a class="dropdown-item text-dark" href="#"><i class="fas fa-wallet"></i> <span>Số dư tài khoản:</span> <span class="fw-bold">0đ</span></a></li>
+						    <li><a class="dropdown-item text-dark" href="#"><i class="fas fa-user-cog"></i> <span>Quản lý tài khoản</span></a></li>
+						    <li><a class="dropdown-item text-dark" href="#"><i class="fas fa-history"></i> <span>Lịch sử đơn hàng</span></a></li>
+						    <li><a class="dropdown-item text-dark" href="#"><i class="fas fa-heart"></i> <span>Sản phẩm yêu thích</span></a></li>
+						    <li><hr class="dropdown-divider"></li>
+						    <li><a class="dropdown-item text-danger" href="/logout"><i class="fas fa-sign-out-alt text-danger" ></i> <span class="text-danger">Đăng xuất</span></a></li>
+						</ul>
+
 				    </div>
-				    <a href="#" class="cart-btn text-decoration-none">
-					    <i class="fas fa-shopping-cart"></i>
-					    <span class="fw-bold">Giỏ hàng</span>
-					    <div class="cart-badge">0</div>
-					</a>
-
-
+				
+				    <!-- Nếu người dùng chưa đăng nhập -->
+				    <div th:if="${session.username == null}" class="d-flex align-items-center mx-2">
+				    	<button type="button" class="btn btn-light d-flex align-items-center">
+					        <i class="fa-solid fa-user-large"></i>
+					    </button>
+				        <a href="/login">Đăng nhập</a>
+				        <span class="mx-1">/</span>
+				        <a href="/register">Đăng ký</a>
+				    </div>
+				
+				    <a th:href="@{/gio-hang}"  class="cart-btn text-decoration-none">
+				        <i class="fas fa-shopping-cart"></i>
+				        <span class="fw-bold">Giỏ hàng</span>
+				        <div class="cart-badge" th:text=${cartCount}>0</div>
+				    </a>
 				</div>
+				
 
             </div>
         </nav>
@@ -71,7 +93,7 @@
 			        </button>
 			        <ul class="dropdown-menu">
 			            <li th:each="category : ${categories}">
-			                <a class="dropdown-item" href="#">
+			                <a class="dropdown-item"  th:href="@{/NMTLegit_Store/category/{id}(id=${category.maDanhMuc})}">
 			                    
 			                    <span th:utext="${category.icon}"></span>
 			                    <span th:text="${category.tenDanhMuc}"></span>

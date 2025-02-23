@@ -147,6 +147,7 @@
 .dropdown-item i {
     width: 20px;
     text-align: center;
+    color: black;
 }
 .dropdown-item span {
 	color: black;
@@ -436,4 +437,19 @@ h2 {
     display: flex;
     align-items: stretch;
 }
+
+.dropdown-menu a{
+	color: black;
+}
+
+.dropdown-menu .dropdown-item {
+    color: black ; /* Chữ đen mặc định */
+
+}
+
+.dropdown-menu .dropdown-item:hover {
+    color: black !important; /* Khi hover vào, chữ chuyển thành trắng */
+ 
+}
+
 
