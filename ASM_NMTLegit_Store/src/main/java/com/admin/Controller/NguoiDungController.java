@@ -59,6 +59,7 @@ public class NguoiDungController {
             userToUpdate.setHoTen(nguoiDung.getHoTen());
             userToUpdate.setEmail(nguoiDung.getEmail());
             userToUpdate.setUsername(nguoiDung.getUsername());
+            userToUpdate.setGioiTinh(nguoiDung.getGioiTinh());
             userToUpdate.setSoDienThoai(nguoiDung.getSoDienThoai());
             userToUpdate.setDiaChi(nguoiDung.getDiaChi());
             userToUpdate.setVaiTro(nguoiDung.getVaiTro());

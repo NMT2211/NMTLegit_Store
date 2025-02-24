@@ -24,6 +24,15 @@
                 <input type="text" class="form-control" th:field="*{hoTen}" required>
             </div>
             <div class="mb-3">
+			    <label class="form-label">Giới tính</label>
+			    <select class="form-select" th:field="*{gioiTinh}">
+			        <option th:value="true" >Nam</option>
+			        <option th:value="false" >Nữ</option>
+			    </select>
+			</div>
+
+            
+            <div class="mb-3">
                 <label class="form-label">Email</label>
                 <input type="email" class="form-control" th:field="*{email}" required>
             </div>
@@ -67,6 +76,7 @@
                     <th>ID</th>
                     <th>Username</th>
                     <th>Họ Tên</th>
+                    <th>Giới Tính</th>
                     <th>Email</th>
                     <th>Số ĐT</th>
                     <th>Vai Trò</th>
@@ -80,6 +90,7 @@
                     <td th:text="${user.maNguoiDung}"></td>
                     <td th:text="${user.username}"></td>
                     <td th:text="${user.hoTen}"></td>
+                    <td th:text="${user.gioiTinh ? 'Nam' : 'Nữ'}"></td>
                     <td th:text="${user.email}"></td>
                     <td th:text="${user.soDienThoai}"></td>
                     <td th:text="${user.vaiTro}"></td>

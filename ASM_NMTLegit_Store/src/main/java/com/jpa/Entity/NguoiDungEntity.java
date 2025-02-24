@@ -48,6 +48,10 @@ public class NguoiDungEntity {
     @Column(name = "NgayTao", nullable = false, updatable = false)
     @Builder.Default
     private Date ngayTao = new Date(); // ✅ Đặt mặc định là ngày hiện tại
+    
+    @Column(name = "GioiTinh", nullable = false)
+    @Builder.Default
+    private Boolean gioiTinh = true; // true = Nam, false = Nữ
 
     @PrePersist
     protected void onCreate() {

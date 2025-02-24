@@ -57,6 +57,9 @@ public class AuthController {
         session.setAttribute("username", existingUser.getUsername());
         session.setAttribute("manguoidung", existingUser.getMaNguoiDung());
         session.setAttribute("role", existingUser.getVaiTro());
+        session.setAttribute("gt", existingUser.getGioiTinh());
+        
+        System.out.println("Giới tính set vào session: " + existingUser.getGioiTinh());
         
         String previousUrl = (String) session.getAttribute("previousUrl");
         if (previousUrl != null) {
