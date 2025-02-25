@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thống Kê Doanh Thu Theo Tháng</title>
+    <!-- Nhúng Chart.js -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f1f5f9;
+            --text-color: #334155;
+            --border-color: #e2e8f0;
+            --header-bg: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background-color: var(--header-bg);
+            color: white;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+        }
+
+        .chart-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .chart-box h3 {
+            color: var(--text-color);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-top: 2rem;
+        }
+
+        th {
+            background-color: var(--header-bg);
+            color: white;
+            font-weight: 600;
+            padding: 1rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td:first-child {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .chart-container {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{admin/layout/navbar :: adminNavbar}"></div>
+    <div class="header">
+        <h2>📊 Thống Kê Doanh Thu Theo Tháng</h2>
+    </div>
+
+    <div class="container">
+        <!-- Khu vực 2 biểu đồ -->
+        <div class="chart-container">
+            <div class="chart-box">
+                <h3>Doanh Thu Từng Tháng</h3>
+                <canvas id="revenueChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <h3>Số Lượng Bán Từng Tháng</h3>
+                <canvas id="countChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Bảng chi tiết -->
+        <table>
+            <thead>
+                <tr>
+                    <th>MONTH</th>
+                    <th>REVENUE</th>
+                    <th>ITEM COUNT</th>
+                    <th>MIN PRICE</th>
+                    <th>MAX PRICE</th>
+                    <th>AVG PRICE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="data : ${monthlyData}">
+                    <td th:text="${data.month}"></td>
+                    <td th:text="${#numbers.formatDecimal(data.revenue, 1, 2)}"></td>
+                    <td th:text="${data.itemCount}"></td>
+                    <td th:text="${#numbers.formatDecimal(data.minPrice, 1, 2)}"></td>
+                    <td th:text="${#numbers.formatDecimal(data.maxPrice, 1, 2)}"></td>
+                    <td th:text="${#numbers.formatDecimal(data.avgPrice, 1, 2)}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Script xử lý biểu đồ -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var months = /*[[${months}]]*/ [];
+        var revenues = /*[[${revenues}]]*/ [];
+        var itemCounts = /*[[${itemCounts}]]*/ [];
+
+        // Chuyển sang JS array
+        months = JSON.parse(JSON.stringify(months));
+        revenues = JSON.parse(JSON.stringify(revenues));
+        itemCounts = JSON.parse(JSON.stringify(itemCounts));
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Biểu đồ Doanh thu
+            var revenueCtx = document.getElementById("revenueChart").getContext("2d");
+            new Chart(revenueCtx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Doanh thu',
+                        data: revenues,
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Tháng'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Doanh thu (VNĐ)'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Biểu đồ Số lượng
+            var countCtx = document.getElementById("countChart").getContext("2d");
+            new Chart(countCtx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Số lượng bán',
+                        data: itemCounts,
+                        backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Tháng'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Số lượng'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+        /*]]>*/
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

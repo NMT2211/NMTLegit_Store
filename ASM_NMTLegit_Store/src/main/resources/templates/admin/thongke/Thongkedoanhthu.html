@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thống Kê Doanh Thu</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f1f5f9;
+            --text-color: #334155;
+            --border-color: #e2e8f0;
+            --header-bg: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background-color: var(--header-bg);
+            color: white;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+        }
+
+        .chart-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .chart-box h3 {
+            color: var(--text-color);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-top: 2rem;
+        }
+
+        th {
+            background-color: var(--header-bg);
+            color: white;
+            font-weight: 600;
+            padding: 1rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td:first-child {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .chart-container {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{admin/layout/navbar :: adminNavbar}"></div>
+    <div class="header">
+        <h2>📊 Thống Kê Doanh Thu Theo Loại</h2>
+    </div>
+
+    <div class="container">
+        <div class="chart-container">
+            <!-- Biểu đồ 1: Doanh thu theo loại -->
+            <div class="chart-box">
+                <h3>Doanh Thu Theo Loại</h3>
+                <canvas id="revenueChart"></canvas>
+            </div>
+            <!-- Biểu đồ 2: Số lượng bán theo loại -->
+            <div class="chart-box">
+                <h3>Số Lượng Bán Theo Loại</h3>
+                <canvas id="quantityChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Bảng thống kê chi tiết -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Loại</th>
+                    <th>Doanh Thu</th>
+                    <th>Số Lượng Bán</th>
+                    <th>Giá Thấp Nhất</th>
+                    <th>Giá Cao Nhất</th>
+                    <th>Giá Trung Bình</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="data : ${revenueData}">
+                    <td th:text="${data.category}"></td>
+                    <td th:text="${#numbers.formatDecimal(data.totalRevenue, 1, 2)}"></td>
+                    <td th:text="${data.totalQuantity}"></td>
+                    <td th:text="${#numbers.formatDecimal(data.minPrice, 1, 2)}"></td>
+                    <td th:text="${#numbers.formatDecimal(data.maxPrice, 1, 2)}"></td>
+                    <td th:text="${#numbers.formatDecimal(data.avgPrice, 1, 2)}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var categories = /*[[${categories}]]*/ [];
+        var totalRevenues = /*[[${totalRevenues}]]*/ [];
+        var totalQuantities = /*[[${totalQuantities}]]*/ [];
+
+        categories = JSON.parse(JSON.stringify(categories));
+        totalRevenues = JSON.parse(JSON.stringify(totalRevenues));
+        totalQuantities = JSON.parse(JSON.stringify(totalQuantities));
+
+        var colors = [
+            '#3b82f6', '#ef4444', '#f59e0b', '#10b981', 
+            '#6366f1', '#8b5cf6', '#ec4899', '#14b8a6'
+        ];
+
+        function createChart(ctx, labels, data, title) {
+            return new Chart(ctx, {
+                type: "doughnut",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: "right",
+                            labels: {
+                                font: {
+                                    size: 12,
+                                    family: "'Segoe UI', system-ui, sans-serif"
+                                },
+                                padding: 15
+                            }
+                        },
+                        title: {
+                            display: false
+                        }
+                    },
+                    cutout: '60%',
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var revenueCtx = document.getElementById("revenueChart").getContext("2d");
+            createChart(revenueCtx, categories, totalRevenues, "Doanh Thu Theo Loại");
+
+            var quantityCtx = document.getElementById("quantityChart").getContext("2d");
+            createChart(quantityCtx, categories, totalQuantities, "Số Lượng Bán Theo Loại");
+        });
+        /*]]>*/
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -66,13 +66,21 @@
             <div class="col-md-8">
                 <div th:each="cartItem : ${cart}" class="card cart-card mb-3 p-3 shadow-sm">
                     <div class="row align-items-center">
-                        <div class="col-md-3">
-                            <img th:src="@{'/images/products/' + ${cartItem.maSanPham.danhMuc.hinhAnh}}" class="rounded img-fluid">
-                        </div>
+                        <!-- Đúng -->
+						<div class="col-md-3">
+						    <img th:if="${cartItem.maSanPham.hinhAnhs.size() > 0}"
+						         th:src="@{'/images/products/' + ${cartItem.maSanPham.hinhAnhs[0].duongDanHinh}}"
+						         alt="Hình ảnh sản phẩm" class="img-fluid rounded" style="max-height: 100px;">
+						    <img th:if="${cartItem.maSanPham.hinhAnhs.size() == 0}"
+						         src="/images/no-image.png"
+						         alt="Không có hình ảnh" class="img-fluid rounded" style="max-height: 100px;">
+						</div>
+
                         <div class="col-md-5">
                             <h5 class="fw-bold" th:text="${cartItem.maSanPham.tenSanPham}"></h5>
                             <p class="text-muted mb-1"><span th:text="${cartItem.maSanPham.danhMuc.tenDanhMuc}"></span></p>
-                            <p class="text-success fw-bold mb-1">✔ Còn hàng</p>
+                            
+                            <p class="text-success fw-bold mb-1" th:text="${cartItem.maSanPham.tonKho > 0 ? '✔ Còn hàng' : ' Hết hàng'}"></p>
                         </div>
                         <div class="col-md-2 text-center">
                             <button class="btn btn-outline-secondary" th:onclick="|updateQuantity(${cartItem.maGioHang}, ${cartItem.soLuong - 1})|">-</button>
@@ -97,6 +105,10 @@
                 </div>
             </div>
         </div>
+        <button class="btn btn-outline-danger w-20 mt-2 mb-4" onclick="clearCart()">
+		    <i class="fas fa-trash-alt me-2"></i> Xóa tất cả sản phẩm
+		</button>
+        
     </div>
 
 </div>
@@ -131,6 +143,21 @@
             });
         }
     }
+    
+    function clearCart() {
+        if (confirm("Bạn chắc chắn muốn xóa tất cả sản phẩm khỏi giỏ hàng?")) {
+            fetch('/gio-hang/clear', { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Đã xóa tất cả sản phẩm khỏi giỏ hàng!");
+                        location.reload();
+                    } else {
+                        alert("Có lỗi xảy ra, vui lòng thử lại!");
+                    }
+                });
+        }
+    }
+
 </script>
 
 </body>

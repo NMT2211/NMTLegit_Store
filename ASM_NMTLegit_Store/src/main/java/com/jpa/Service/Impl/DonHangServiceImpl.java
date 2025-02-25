@@ -8,6 +8,8 @@ import com.jpa.Service.DonHangService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,5 +46,17 @@ public class DonHangServiceImpl implements DonHangService {
             donHangDao.save(dh);
         });
     }
+    
+   
+    @Override
+    public long countDonHangHomNay() {
+        return donHangDao.countDonHangHomNay();
+    }
+    
+    @Override
+    public long countDonHangBiHuy() {
+        return donHangDao.countDonHangBiHuy();
+    }
+
 }
 

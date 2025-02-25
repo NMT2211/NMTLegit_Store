@@ -25,4 +25,19 @@ public class ChiTietDonHangServiceImpl implements ChiTietDonHangService {
     public List<ChiTietDonHangEntity> getChiTietByDonHang(Integer maDonHang) {
         return chiTietDonHangDao.findByDonHang_MaDonHang(maDonHang);
     }
+    
+    @Override
+    public List<Object[]> getRevenueStatistics() {
+        return chiTietDonHangDao.getRevenueStatistics();
+    }
+
+    @Override
+    public List<Object[]> getMonthlyRevenueStatistics() {
+        return chiTietDonHangDao.getMonthlyRevenueStatistics();
+    }
+    public List<Object[]> findTop10Customers() {
+       
+         List<Object[]> results = chiTietDonHangDao.findTopCustomers();
+         return results.stream().limit(10).toList();
+    }
 }

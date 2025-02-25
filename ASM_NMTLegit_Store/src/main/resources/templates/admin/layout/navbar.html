@@ -2,17 +2,26 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <!-- Bootstrap 5 (nếu bạn chưa có) -->
+    <!-- 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" 
+          integrity="sha512-...sha512Hash..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Admin Navbar</title>
 </head>
 <body>
 
 <!-- Fragment Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="adminNavbar">
     <div class="container-fluid">
+        <!-- Logo / Trang chủ -->
         <a class="navbar-brand" href="/admin">
             <i class="fa-solid fa-user-shield"></i> Admin Panel
         </a>
 
-        <!-- Nút Toggle Mobile -->
+        <!-- Nút Toggle (Mobile) -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -20,30 +29,46 @@
         <!-- Menu -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
+                <!-- Trang chủ -->
                 <li class="nav-item">
-                    <a class="nav-link" th:classappend="${page == 'home' ? 'active' : ''}" href="/admin">
+                    <a class="nav-link"
+                       th:classappend="${page == 'home' ? 'active' : ''}"
+                       href="/admin">
                         <i class="fa-solid fa-home"></i> Trang Chủ
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:classappend="${page == 'category' ? 'active' : ''}" href="/admin/category">
-                        <i class="fa-solid fa-list"></i> Quản Lý Danh Mục
+
+                <!-- Dropdown Quản Lý -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#" id="quanLyDropdown"
+                       role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <i class="fa-solid fa-cogs"></i> Quản Lý
                     </a>
+                    <ul class="dropdown-menu" aria-labelledby="quanLyDropdown">
+                        <li><a class="dropdown-item" href="/admin/category" th:classappend="${page == 'category' ? 'active' : ''}"><i class="fa-solid fa-list"></i> Quản Lý Danh Mục</a></li>
+                        <li><a class="dropdown-item" href="/admin/product" th:classappend="${page == 'product' ? 'active' : ''}"><i class="fa-solid fa-box"></i> Quản Lý Sản Phẩm</a></li>
+                        <li><a class="dropdown-item" href="/admin/orders" th:classappend="${page == 'orders' ? 'active' : ''}"><i class="fa-solid fa-file-invoice"></i> Quản Lý Đơn Hàng</a></li>
+                        <li><a class="dropdown-item" href="/admin/users" th:classappend="${page == 'users' ? 'active' : ''}"><i class="fa-solid fa-users"></i> Quản Lý Người Dùng</a></li>
+                    </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:classappend="${page == 'product' ? 'active' : ''}" href="/admin/product">
-                        <i class="fa-solid fa-box"></i> Quản Lý Sản Phẩm
+
+                <!-- Dropdown Thống Kê -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#" id="thongkeDropdown"
+                       role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <i class="fa-solid fa-chart-line"></i> Thống Kê
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:classappend="${page == 'orders' ? 'active' : ''}" href="/admin/orders">
-                        <i class="fa-solid fa-file-invoice"></i> Quản Lý Đơn Hàng
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:classappend="${page == 'users' ? 'active' : ''}" href="/admin/users">
-                        <i class="fa-solid fa-users"></i> Quản Lý Người Dùng
-                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="thongkeDropdown">
+                        <li><a class="dropdown-item" href="/thongketonghop" th:classappend="${page == 'thongkeTongHop' ? 'active' : ''}">Tổng Hợp Thống Kê</a></li>
+                        <li><a class="dropdown-item" href="/thongkehangton" th:classappend="${page == 'thongkeHangTon' ? 'active' : ''}">Hàng Tồn</a></li>
+                        <li><a class="dropdown-item" href="/thongkedoanhthu" th:classappend="${page == 'thongkeDoanhThu' ? 'active' : ''}">Doanh Thu</a></li>
+                        <li><a class="dropdown-item" href="/thongkedoanhthutheothang" th:classappend="${page == 'thongkeDoanhThuThang' ? 'active' : ''}">Doanh Thu Theo Tháng</a></li>
+                        <li><a class="dropdown-item" href="/thongketop10" th:classappend="${page == 'top10khachvip' ? 'active' : ''}">Top 10 Khách VIP</a></li>
+                    </ul>
                 </li>
             </ul>
 
@@ -58,6 +83,11 @@
         </div>
     </div>
 </nav>
+
+<!-- Bootstrap 5 (nếu bạn chưa có) -->
+<!-- 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+-->
 
 </body>
 </html>

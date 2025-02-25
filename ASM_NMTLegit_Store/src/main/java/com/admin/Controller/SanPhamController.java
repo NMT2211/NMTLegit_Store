@@ -10,8 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.*;
+import java.util.Comparator;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin/product")
@@ -19,20 +23,32 @@ public class SanPhamController {
 
     @Autowired
     private SanPhamService sanPhamService;
-    
+
     @Autowired
-    private DanhMucService danhMucService; // Thêm service danh mục
-    
+    private DanhMucService danhMucService;
+
     @Autowired
-    private HinhAnhSanPhamService hinhAnhSanPhamService; // Thêm service danh mục
+    private HinhAnhSanPhamService hinhAnhSanPhamService;
 
     private static final String IMAGE_DIR = "src/main/resources/static/images/products/";
 
     @GetMapping
-    public String viewProducts(Model model) {
-        model.addAttribute("products", sanPhamService.getAllSanPham());
-        model.addAttribute("sanPham", new SanPhamEntity()); // Để thêm mới
+    public String viewProducts(@RequestParam(value = "categoryId", required = false) String categoryId,
+                               @RequestParam(value = "search", required = false) String search,
+                               Model model) {
+
+        List<SanPhamEntity> products;
+
+        if ((categoryId != null && !categoryId.isEmpty()) || (search != null && !search.isEmpty())) {
+            products = sanPhamService.getSanPhamByCategoryAndName(categoryId, search);
+        } else {
+            products = sanPhamService.getAllSanPham();
+        }
+
+        model.addAttribute("products", products);
+        model.addAttribute("sanPham", new SanPhamEntity());
         model.addAttribute("categories", danhMucService.findAll());
+
         return "admin/quanLy/sanPhamAdmin";
     }
 
@@ -40,16 +56,14 @@ public class SanPhamController {
     public String saveProduct(@ModelAttribute("sanPham") SanPhamEntity sanPham,
                               @RequestParam(value = "imageFiles", required = false) MultipartFile[] imageFiles) {
         try {
-            // Kiểm tra nếu sản phẩm đã tồn tại
             SanPhamEntity existingProduct = sanPhamService.getSanPhamById(sanPham.getMaSanPham());
-            
+
             if (existingProduct != null) {
-                sanPham.setHinhAnhs(existingProduct.getHinhAnhs()); // Giữ nguyên ảnh cũ
+                sanPham.setHinhAnhs(existingProduct.getHinhAnhs());
             }
 
             SanPhamEntity savedProduct = sanPhamService.saveSanPham(sanPham);
 
-            // Kiểm tra nếu có ảnh mới tải lên
             if (imageFiles != null && imageFiles.length > 0) {
                 for (MultipartFile imageFile : imageFiles) {
                     if (!imageFile.isEmpty()) {
@@ -57,7 +71,6 @@ public class SanPhamController {
                         Path filePath = Paths.get(IMAGE_DIR + fileName);
                         Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-                        // Lưu ảnh mới vào DB mà không xóa ảnh cũ
                         HinhAnhSanPhamEntity hinhAnh = HinhAnhSanPhamEntity.builder()
                                 .sanPham(savedProduct)
                                 .duongDanHinh(fileName)
@@ -72,8 +85,6 @@ public class SanPhamController {
         return "redirect:/admin/product";
     }
 
-
-
     @GetMapping("/edit/{id}")
     public String editProduct(@PathVariable String id, Model model) {
         model.addAttribute("sanPham", sanPhamService.getSanPhamById(id));
@@ -87,4 +98,28 @@ public class SanPhamController {
         sanPhamService.deleteSanPham(id);
         return "redirect:/admin/product";
     }
+    
+    @GetMapping("/filter")
+    @ResponseBody
+    public List<SanPhamEntity> filterProducts(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String sortByStock) {
+
+        List<SanPhamEntity> products;
+
+        if (category != null && !category.isEmpty()) {
+            products = sanPhamService.getSanPhamByCategory(category);
+        } else {
+            products = sanPhamService.getAllSanPham();
+        }
+
+        if ("asc".equals(sortByStock)) {
+            products.sort(Comparator.comparing(SanPhamEntity::getTonKho)); // Sắp xếp tăng dần
+        } else if ("desc".equals(sortByStock)) {
+            products.sort(Comparator.comparing(SanPhamEntity::getTonKho).reversed()); // Sắp xếp giảm dần
+        }
+
+        return products;
+    }
+
 }

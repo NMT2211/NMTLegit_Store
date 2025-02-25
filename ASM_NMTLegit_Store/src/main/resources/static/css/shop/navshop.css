@@ -13,9 +13,7 @@
             color: white;
             font-weight: bold;
         }
-        .navbar{
         
-        }
         
         .navbar, header {
             background-color: #007AFF;
@@ -59,7 +57,7 @@
             font-weight: bold;
         }
         
-        .container a {
+        .sanphamnav a {
             font-size: 14.5px;
             color: white !important;
             font-weight: normal;

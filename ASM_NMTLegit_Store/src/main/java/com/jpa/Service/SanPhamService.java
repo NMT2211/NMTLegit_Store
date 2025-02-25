@@ -14,4 +14,11 @@ public interface SanPhamService {
     List<SanPhamEntity> getSanPhamByCategory(String maDanhMuc);
     List<SanPhamEntity> getSanPhamByCategoryAndPrice(String categoryId, BigDecimal minPrice, BigDecimal maxPrice);
     List<SanPhamEntity> getSanPhamByCategoryAndName(String categoryId, String searchTerm);
+    
+    public List<SanPhamEntity> searchSanPhamByKeyword(String keyword);
+    List<SanPhamEntity> filterSanPham(String categoryId, BigDecimal minPrice, BigDecimal maxPrice, String sortBy);
+
+    
+    List<Object[]> getInventoryStatistics();
+    long countAllSanPham();
 }

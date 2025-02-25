@@ -9,13 +9,13 @@
 <body>
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="card p-4" style="width: 400px;">
-            <h2 class="text-center mb-4" th:text="${isLogin ? 'Đăng Nhập' : 'Đăng Ký'}"></h2>
+            <h2 class="text-center mb-4" >Đăng Nhập</h2>
             
             <!-- Hiển thị thông báo lỗi/thành công -->
             <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
             <div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"></div>
             
-            <form th:action="@{${isLogin ? '/auth/login' : '/auth/register'}}" method="post">
+            <form th:action="@{/auth/login}" method="post">
                 <div class="mb-3">
                     <label class="form-label">Tên đăng nhập</label>
                     <input type="text" name="username" class="form-control" required>
@@ -28,8 +28,8 @@
             </form>
             
             <p class="text-center mt-3">
-                <span th:text="${isLogin ? 'Chưa có tài khoản?' : 'Đã có tài khoản?'}"></span>
-                <a th:href="@{${isLogin ? '/register' : '/login'}}" class="text-primary" th:text="${isLogin ? 'Đăng ký' : 'Đăng nhập'}"></a>
+                <span >Chưa có tài khoản?</span>
+                <a th:href="@{/register}" class="text-primary">Đăng ký</a>
             </p>
         </div>
     </div>

@@ -5,119 +5,103 @@
     <title>Trang Quản Trị - Admin</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        .sidebar { min-height: 100vh; }
+        .nav-link { cursor: pointer; }
+    </style>
 </head>
 <body>
-    
-    <!-- Thanh điều hướng -->
-    <div th:replace="~{admin/layout/navbar :: adminNavbar}"></div>
 
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-                <div class="position-sticky pt-3">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#tab-dashboard">
-                                <i class="fa-solid fa-chart-line"></i> Tổng Quan
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#tab-category">
-                                <i class="fa-solid fa-list"></i> Quản Lý Danh Mục
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#tab-product">
-                                <i class="fa-solid fa-box"></i> Quản Lý Sản Phẩm
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#tab-order">
-                                <i class="fa-solid fa-file-invoice"></i> Quản Lý Đơn Hàng
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#tab-users">
-                                <i class="fa-solid fa-users"></i> Quản Lý Người Dùng
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+<div th:replace="~{admin/layout/navbar :: adminNavbar}"></div>
 
-            <!-- Nội dung chính -->
-            <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4">
-                <div class="tab-content mt-4">
-                    <!-- Dashboard -->
-                    <div class="tab-pane fade show active" id="tab-dashboard">
-                        <h2><i class="fa-solid fa-chart-line"></i> Tổng Quan</h2>
-                        <p>Chào mừng bạn đến với trang quản trị.</p>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="card text-white bg-primary mb-3">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Tổng số sản phẩm</h5>
-                                        <p class="card-text">120</p>
-                                    </div>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 bg-light sidebar">
+            <ul class="nav flex-column nav-pills py-3">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#dashboard"><i class="fa-solid fa-chart-line"></i> Tổng Quan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#category"><i class="fa-solid fa-list"></i> Danh Mục</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#product"><i class="fa-solid fa-box"></i> Sản Phẩm</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#order"><i class="fa-solid fa-file-invoice"></i> Đơn Hàng</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#users"><i class="fa-solid fa-users"></i> Người Dùng</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Nội dung chính -->
+        <main class="col-md-10 px-md-4">
+            <div class="tab-content py-4">
+                <div class="tab-pane fade show active" id="dashboard">
+                    <h2>Tổng Quan</h2>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <h5>Tổng sản phẩm</h5>
+                                    <p  th:text="${totalProducts}"></p>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="card text-white bg-success mb-3">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Đơn hàng hôm nay</h5>
-                                        <p class="card-text">25</p>
-                                    </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <h5>Đơn hàng hôm nay</h5>
+                                    <p th:text="${ordersToday}"></p>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="card text-white bg-warning mb-3">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Khách hàng mới</h5>
-                                        <p class="card-text">8</p>
-                                    </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body">
+                                    <h5>Khách hàng mới</h5>
+                                    <p th:text="${newCustomers}"></p>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="card text-white bg-danger mb-3">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Đơn hàng bị hủy</h5>
-                                        <p class="card-text">2</p>
-                                    </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-danger text-white">
+                                <div class="card-body">
+                                    <h5>Đơn hàng bị hủy</h5>
+                                    <p th:text="${canceledOrders}"></p>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Quản lý danh mục -->
-                    <div class="tab-pane fade" id="tab-category">
-                        <h2><i class="fa-solid fa-list"></i> Quản lý Danh Mục</h2>
-                        <p><a href="/admin/category" class="btn btn-primary">Đi tới Quản lý Danh Mục</a></p>
-                    </div>
-
-                    <!-- Quản lý sản phẩm -->
-                    <div class="tab-pane fade" id="tab-product">
-                        <h2><i class="fa-solid fa-box"></i> Quản lý Sản Phẩm</h2>
-                        <p><a href="/admin/product" class="btn btn-primary">Đi tới Quản lý Sản Phẩm</a></p>
-                    </div>
-
-                    <!-- Quản lý đơn hàng -->
-                    <div class="tab-pane fade" id="tab-order">
-                        <h2><i class="fa-solid fa-file-invoice"></i> Quản lý Đơn Hàng</h2>
-                        <p><a href="/admin/orders" class="btn btn-primary">Đi tới Quản lý Đơn Hàng</a></p>
-                    </div>
-
-                    <!-- Quản lý người dùng -->
-                    <div class="tab-pane fade" id="tab-users">
-                        <h2><i class="fa-solid fa-users"></i> Quản lý Người Dùng</h2>
-                        <p><a href="/admin/users" class="btn btn-primary">Đi tới Quản lý Người Dùng</a></p>
-                    </div>
                 </div>
-            </main>
-        </div>
+
+                <div class="tab-pane fade" id="category">
+                    <h2>Quản lý Danh Mục</h2>
+                    <a href="/admin/category" class="btn btn-primary">Đi tới Quản lý Danh Mục</a>
+                </div>
+
+                <div class="tab-pane fade" id="product">
+                    <h2>Quản lý Sản Phẩm</h2>
+                    <a href="/admin/product" class="btn btn-primary">Đi tới Quản lý Sản Phẩm</a>
+                </div>
+
+                <div class="tab-pane fade" id="order">
+                    <h2>Quản lý Đơn Hàng</h2>
+                    <a href="/admin/orders" class="btn btn-primary">Đi tới Quản lý Đơn Hàng</a>
+                </div>
+
+                <div class="tab-pane fade" id="users">
+                    <h2>Quản lý Người Dùng</h2>
+                    <a href="/admin/users" class="btn btn-primary">Đi tới Quản lý Người Dùng</a>
+                </div>
+            </div>
+        </main>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

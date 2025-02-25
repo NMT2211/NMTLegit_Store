@@ -1,7 +1,9 @@
 package com.shop.Controller;
 
 import java.math.BigDecimal;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +51,35 @@ public class index {
             model.addAttribute("cartCount", 0);
         }
 
+        
+        
         // Lấy danh sách sản phẩm và danh mục từ database
+        
         model.addAttribute("products", sanPhamService.getAllSanPham());
         model.addAttribute("categories", danhMucService.findAll());
+        
+        List<DanhMucEntity> categories = danhMucService.findAll();
+        model.addAttribute("categories", categories);
+
+        System.out.println("==== Danh sách danh mục ====");
+        for (DanhMucEntity category : categories) {
+            System.out.println("Danh mục: " + category.getTenDanhMuc());
+        }
+
+        // Lấy sản phẩm theo từng danh mục và in ra
+        Map<DanhMucEntity, List<SanPhamEntity>> productsByCategory = new LinkedHashMap<>();
+        System.out.println("==== Sản phẩm theo từng danh mục ====");
+        for (DanhMucEntity category : categories) {
+            List<SanPhamEntity> products = sanPhamService.getSanPhamByCategory(category.getMaDanhMuc());
+            productsByCategory.put(category, products);
+
+            System.out.println("Danh mục: " + category.getTenDanhMuc());
+            for (SanPhamEntity product : products) {
+                System.out.println("  - Sản phẩm: " + product.getTenSanPham() 
+                    + ", Giá: " + product.getGia());
+            }
+        }
+        model.addAttribute("productsByCategory", productsByCategory);
 
         return "/shop/index";
     }
@@ -127,6 +155,62 @@ public class index {
         
         return "/shop/category";
     }
+
+    
+    @RequestMapping("/search")
+    public String searchProducts(@RequestParam("keyword") String keyword, Model model, HttpSession session) {
+
+        Integer userId = (Integer) session.getAttribute("manguoidung");
+
+        if (userId != null) {
+            int cartCount = gioHangService.countProductsInCart(userId);
+            model.addAttribute("cartCount", cartCount);
+        } else {
+            model.addAttribute("cartCount", 0);
+        }
+
+        List<SanPhamEntity> searchResults = sanPhamService.searchSanPhamByKeyword(keyword);
+
+        model.addAttribute("products", searchResults);
+        model.addAttribute("categories", danhMucService.findAll());
+        model.addAttribute("searchTerm", keyword);
+
+        return "/shop/searchResults";
+    }
+    
+    @RequestMapping("/filter/sp")
+    public String filterProducts(
+        @RequestParam(value = "categoryId", required = false) String categoryId,
+        
+        @RequestParam(value = "minPrice", required = false) BigDecimal minPrice,
+        @RequestParam(value = "maxPrice", required = false) BigDecimal maxPrice,
+        @RequestParam(value = "sortBy", required = false, defaultValue = "default") String sortBy,
+        Model model, HttpSession session) {
+
+        Integer userId = (Integer) session.getAttribute("manguoidung");
+        if (userId != null) {
+            int cartCount = gioHangService.countProductsInCart(userId);
+            model.addAttribute("cartCount", cartCount);
+        } else {
+            model.addAttribute("cartCount", 0);
+        }
+
+        // Xử lý lọc sản phẩm
+        List<SanPhamEntity> filteredProducts = sanPhamService.filterSanPham(categoryId, minPrice, maxPrice, sortBy);
+
+        model.addAttribute("products", filteredProducts);
+        model.addAttribute("categories", danhMucService.findAll());
+
+        // Trả lại thông tin filter để hiển thị lại trên giao diện
+        model.addAttribute("selectedCategory", categoryId);
+       
+        model.addAttribute("minPrice", minPrice);
+        model.addAttribute("maxPrice", maxPrice);
+        model.addAttribute("sortBy", sortBy);
+
+        return "/shop/searchResults";
+    }
+
 
 
 }

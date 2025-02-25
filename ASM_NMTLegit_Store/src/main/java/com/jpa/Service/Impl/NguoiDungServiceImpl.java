@@ -31,6 +31,11 @@ public class NguoiDungServiceImpl implements NguoiDungService {
     }
 
     @Override
+    public Optional<NguoiDungEntity> findByEmail(String email) {
+        return NguoiDungDao.findByEmail(email);
+    }
+    
+    @Override
     public NguoiDungEntity save(NguoiDungEntity nguoiDung) {
         return NguoiDungDao.save(nguoiDung);
     }
@@ -48,5 +53,10 @@ public class NguoiDungServiceImpl implements NguoiDungService {
     @Override
     public boolean existsByUsername(String username) {
         return NguoiDungDao.existsByUsername(username);
+    }
+    
+    @Override
+    public long countKhachHangMoiHomNay() {
+        return NguoiDungDao.countKhachHangMoiHomNay();
     }
 }

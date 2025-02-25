@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý Đơn hàng - Admin</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+<div th:replace="~{admin/layout/navbar :: adminNavbar}"></div>
+<div class="container py-5">
+    <h2 class="mb-4">Quản lý Đơn hàng</h2>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>Mã đơn hàng</th>
+            <th>Tên khách hàng</th>
+            <th>Ngày đặt hàng</th>
+            <th>Tổng tiền</th>
+            <th>Phương thức thanh toán</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.maDonHang}"></td>
+            <td th:text="${order.nguoiDung.hoTen}"></td>
+            <td th:text="${#dates.format(order.ngayDatHang, 'dd/MM/yyyy')}"></td>
+            <td th:text="${#numbers.formatDecimal(order.tongTien, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+            <td th:text="${order.phuongThucThanhToan}"></td>
+            <td>
+                <span class="badge"
+                      th:classappend="${order.trangThai == 'ChoXuLy' ? 'bg-warning' : order.trangThai == 'DaThanhToan' ? 'bg-info' : order.trangThai == 'HoanTat' ? 'bg-success' : 'bg-danger'}"
+                      th:text="${order.trangThai}"></span>
+            </td>
+            <td>
+                <form th:action="@{/admin/orders/capnhat}" method="post">
+                    <input type="hidden" name="maDonHang" th:value="${order.maDonHang}"/>
+                    <select name="trangThai" class="form-select form-select-sm">
+                        <option th:selected="${order.trangThai == 'ChoXuLy'}" value="ChoXuLy">Chờ xử lý</option>
+                        <option th:selected="${order.trangThai == 'DaThanhToan'}" value="DaThanhToan">Đã thanh toán</option>
+                        <option th:selected="${order.trangThai == 'HoanTat'}" value="HoanTat">Hoàn tất</option>
+                        <option th:selected="${order.trangThai == 'DaHuy'}" value="DaHuy">Đã hủy</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary btn-sm mt-1"><i class="fas fa-save"></i> Lưu</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:if="${message}" class="alert alert-success alert-dismissible">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <span th:text="${message}"></span>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

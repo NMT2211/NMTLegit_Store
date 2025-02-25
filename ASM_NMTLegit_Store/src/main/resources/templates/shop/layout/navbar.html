@@ -11,7 +11,7 @@
 <body>
     <header th:fragment="shopNavbar">
         <div class="top-bar py-2">
-            <div class="container d-flex justify-content-between" >
+            <div class="container d-flex justify-content-between sanphamnav" >
                 <div>
                     <a href="#"><i class="fas fa-shield-alt"></i> Bảo vệ máy tính của bạn</a>
                 </div>
@@ -24,16 +24,16 @@
         </div>
         
         <nav class="navbar navbar-expand-lg">
-            <div class="container d-flex justify-content-between">
+            <div class="container d-flex justify-content-between sanphamnav">
                 <a class="navbar-brand" th:href="@{/NMTLegit_Store/index}">
                     <img src="/images/logo.svg" alt="Divine Shop">
                     <span class="fw-bold">Divine Shop</span>
                 </a>
-                <form class="search-bar mx-auto d-flex">
-                    <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm">
-                    <button type="submit"><i class="fas fa-search"></i></button>
-                </form>
-                
+               <form class="search-bar mx-auto d-flex" th:action="@{/NMTLegit_Store/search}" method="get">
+				    <input type="text" class="form-control" name="keyword" placeholder="Tìm kiếm sản phẩm..." required>
+				    <button type="submit"><i class="fas fa-search"></i></button>
+				</form>
+
 				<div class="user-options d-flex align-items-center">
 					
 
@@ -46,13 +46,19 @@
 
 					        <span class="fw-bold ms-2" th:text="${session.username}"></span>
 					    </button>
-				       <ul class="dropdown-menu dropdown-menu-end text-dark" aria-labelledby="userMenu">
+				        <ul class="dropdown-menu dropdown-menu-end text-dark sanphamnav" aria-labelledby="userMenu">
 						    <li><a class="dropdown-item text-dark" href="#"><i class="fas fa-wallet"></i> <span>Số dư tài khoản:</span> <span class="fw-bold">0đ</span></a></li>
-						    <li><a class="dropdown-item text-dark" href="#"><i class="fas fa-user-cog"></i> <span>Quản lý tài khoản</span></a></li>
-						    <li><a class="dropdown-item text-dark" href="#"><i class="fas fa-history"></i> <span>Lịch sử đơn hàng</span></a></li>
-						    <li><a class="dropdown-item text-dark" href="#"><i class="fas fa-heart"></i> <span>Sản phẩm yêu thích</span></a></li>
+						    <li><a class="dropdown-item text-dark" th:href="@{/quan-li-tai-khoan}"><i class="fas fa-user-cog"></i> <span>Quản lý tài khoản</span></a></li>
+						    <li><a class="dropdown-item text-dark" th:href="@{/don-hang/my-orders}"><i class="fas fa-history"></i> <span>Lịch sử đơn hàng</span></a></li>
+						    <li><a class="dropdown-item text-dark" th:href="@{#}"><i class="fas fa-heart"></i> <span>Sản phẩm yêu thích</span></a></li>
+						    <li th:if="${session.role == 'QuanTri'}">
+						        <a class="dropdown-item text-dark" th:href="@{/admin}">
+						            <i class="fas fa-user-shield"></i> <span>Trang quản trị</span>
+						        </a>
+						    </li>
+						    
 						    <li><hr class="dropdown-divider"></li>
-						    <li><a class="dropdown-item text-danger" href="/logout"><i class="fas fa-sign-out-alt text-danger" ></i> <span class="text-danger">Đăng xuất</span></a></li>
+						    <li><a class="dropdown-item text-danger" th:href="@{/logout}"><i class="fas fa-sign-out-alt text-danger"></i> <span class="text-danger">Đăng xuất</span></a></li>
 						</ul>
 
 				    </div>
@@ -77,7 +83,7 @@
 
             </div>
         </nav>
-        <div class="container d-flex justify-content-between shorter-spacing">
+        <div class="container d-flex justify-content-between shorter-spacing sanphamnav">
             <a href="#"><i class="fas fa-eye"></i> Sản phẩm bạn vừa xem</a>
             <a href="#"><i class="fas fa-fire"></i> Sản phẩm mua nhiều</a>
             <a href="#"><i class="fas fa-percent"></i> Sản phẩm khuyến mại</a>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Top 10 Khách VIP</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f1f5f9;
+            --text-color: #334155;
+            --border-color: #e2e8f0;
+            --header-bg: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background-color: var(--header-bg);
+            color: white;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+        }
+
+        .chart-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .chart-box h3 {
+            color: var(--text-color);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-top: 2rem;
+        }
+
+        th {
+            background-color: var(--header-bg);
+            color: white;
+            font-weight: 600;
+            padding: 1rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td:first-child {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .chart-container {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{admin/layout/navbar :: adminNavbar}"></div>
+    <div class="header">
+        <h2>TOP 10 KHÁCH VIP</h2>
+    </div>
+
+    <div class="container">
+        <!-- Khu vực 2 biểu đồ -->
+        <div class="chart-container">
+            <!-- Biểu đồ 1: Tổng tiền đã mua -->
+            <div class="chart-box">
+                <h3>TỔNG TIỀN ĐÃ MUA</h3>
+                <canvas id="moneyChart"></canvas>
+            </div>
+            <!-- Biểu đồ 2: Số lượng đã bán -->
+            <div class="chart-box">
+                <h3>SỐ LƯỢNG ĐÃ MUA</h3>
+                <canvas id="countChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Bảng thống kê -->
+        <table>
+            <thead>
+                <tr>
+                    <th>CUSTOMER</th>
+                    <th>TOTAL MONEY</th>
+                    <th>ITEM COUNT</th>
+                    <th>MIN PRICE</th>
+                    <th>MAX PRICE</th>
+                    <th>AVG PRICE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="row : ${detailList}">
+                    <td th:text="${row.customerName}"></td>
+                    <td th:text="${#numbers.formatDecimal(row.totalMoney, 1, 2)}"></td>
+                    <td th:text="${row.itemCount}"></td>
+                    <td th:text="${#numbers.formatDecimal(row.minPrice, 1, 2)}"></td>
+                    <td th:text="${#numbers.formatDecimal(row.maxPrice, 1, 2)}"></td>
+                    <td th:text="${#numbers.formatDecimal(row.avgPrice, 1, 2)}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var customerNames = /*[[${customerNames}]]*/ [];
+        var totalMoneys = /*[[${totalMoneys}]]*/ [];
+        var itemCounts = /*[[${itemCounts}]]*/ [];
+
+        customerNames = JSON.parse(JSON.stringify(customerNames));
+        totalMoneys = JSON.parse(JSON.stringify(totalMoneys));
+        itemCounts = JSON.parse(JSON.stringify(itemCounts));
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Biểu đồ Tổng tiền đã mua
+            var moneyCtx = document.getElementById("moneyChart").getContext("2d");
+            new Chart(moneyCtx, {
+                type: 'line',
+                data: {
+                    labels: customerNames,
+                    datasets: [{
+                        label: 'Tổng tiền (VND)',
+                        data: totalMoneys,
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Khách hàng'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Tổng tiền'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Biểu đồ Số lượng đã mua
+            var countCtx = document.getElementById("countChart").getContext("2d");
+            new Chart(countCtx, {
+                type: 'line',
+                data: {
+                    labels: customerNames,
+                    datasets: [{
+                        label: 'Số lượng',
+                        data: itemCounts,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Khách hàng'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Số lượng'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+        /*]]>*/
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -10,4 +10,8 @@ public interface DonHangService {
     Optional<DonHangEntity> getDonHangById(Integer maDonHang);
     List<DonHangEntity> getDonHangByNguoiDung(Integer maNguoiDung);
     void updateTrangThai(Integer maDonHang, String trangThai);
+    
+    long countDonHangHomNay();
+
+    long countDonHangBiHuy();
 }

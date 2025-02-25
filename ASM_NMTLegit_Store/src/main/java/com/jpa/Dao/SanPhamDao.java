@@ -17,5 +17,10 @@ public interface SanPhamDao extends JpaRepository<SanPhamEntity, String> {
 	 @Query("SELECT sp FROM SanPhamEntity sp WHERE sp.danhMuc.maDanhMuc = :categoryId AND sp.giaKhuyenMai BETWEEN :minPrice AND :maxPrice")
 	 List<SanPhamEntity> findByCategoryAndPrice(@Param("categoryId") String categoryId, @Param("minPrice") BigDecimal minPrice, @Param("maxPrice") BigDecimal maxPrice);
 	 List<SanPhamEntity> findByDanhMuc_MaDanhMucAndTenSanPhamContainingIgnoreCase(String categoryId, String searchTerm);
+	 
+	 List<SanPhamEntity> findByTenSanPhamContainingIgnoreCase(String keyword);
 	
+	 @Query("SELECT d.tenDanhMuc, SUM(sp.gia * sp.tonKho), SUM(sp.tonKho), MIN(sp.gia), MAX(sp.gia), AVG(sp.gia) " +
+		       "FROM SanPhamEntity sp JOIN sp.danhMuc d GROUP BY d.tenDanhMuc")
+		List<Object[]> getInventoryStatistics();
 }

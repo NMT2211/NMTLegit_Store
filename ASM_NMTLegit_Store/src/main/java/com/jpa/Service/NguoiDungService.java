@@ -12,6 +12,8 @@ public interface NguoiDungService {
     
     Optional<NguoiDungEntity> findByUsername(String username); // Tìm theo username
     
+    Optional<NguoiDungEntity> findByEmail(String email); 
+    
     NguoiDungEntity save(NguoiDungEntity nguoiDung); // Lưu hoặc cập nhật người dùng
     
     void deleteById(Integer id); // Xóa người dùng theo ID
@@ -19,4 +21,6 @@ public interface NguoiDungService {
     boolean existsByEmail(String email); // Kiểm tra email đã tồn tại hay chưa
     
     boolean existsByUsername(String username); // Kiểm tra username đã tồn tại hay chưa
+    
+    long countKhachHangMoiHomNay();
 }
