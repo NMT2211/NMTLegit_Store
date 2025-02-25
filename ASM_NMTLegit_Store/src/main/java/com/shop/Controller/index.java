@@ -56,6 +56,7 @@ public class index {
         // Lấy danh sách sản phẩm và danh mục từ database
         
         model.addAttribute("products", sanPhamService.getAllSanPham());
+        model.addAttribute("bestSellers", sanPhamService.getSanPhamBanChay());
         model.addAttribute("categories", danhMucService.findAll());
         
         List<DanhMucEntity> categories = danhMucService.findAll();

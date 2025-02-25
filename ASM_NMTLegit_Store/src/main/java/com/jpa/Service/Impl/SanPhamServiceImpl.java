@@ -1,5 +1,6 @@
 package com.jpa.Service.Impl;
 
+import com.jpa.Dao.ChiTietDonHangDao;
 import com.jpa.Dao.SanPhamDao;
 import com.jpa.Entity.SanPhamEntity;
 import com.jpa.Service.SanPhamService;
@@ -139,8 +140,13 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     
-   
-
+    @Autowired
+    private ChiTietDonHangDao chiTietDonHangDao;
+    @Override
+    public List<SanPhamEntity> getSanPhamBanChay() {
+        List<Object[]> bestSelling = chiTietDonHangDao.findBestSellingProducts();
+        return bestSelling.stream().map(obj -> (SanPhamEntity) obj[0]).collect(Collectors.toList());
+    }
    
 
 }

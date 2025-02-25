@@ -37,4 +37,7 @@ public interface SanPhamService {
     Page<SanPhamEntity> getSanPhamByCategoryAndPrice(String categoryId, BigDecimal minPrice, BigDecimal maxPrice, Pageable pageable);
     Page<SanPhamEntity> getSanPhamByCategoryAndName(String categoryId, String searchTerm, Pageable pageable);
     Page<SanPhamEntity> searchSanPhamByKeyword(String keyword, Pageable pageable);
+    
+    
+    List<SanPhamEntity> getSanPhamBanChay();
 }

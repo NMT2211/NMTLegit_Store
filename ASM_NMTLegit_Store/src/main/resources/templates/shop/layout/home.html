@@ -8,22 +8,22 @@
 </head>
 <body>
 
-<!-- <div th:fragment="homeBanner" class="container py-5">
+<div th:fragment="homeBanner" class="container py-5">
     <h2 class="mb-3">Sản phẩm nổi bật</h2>
     <p >Danh sách những sản phẩm theo xu hướng mà có thể bạn sẽ thích</p>
     <div class="row row-cols-1 row-cols-md-4 g-4">
     
     
-        <div class="col" th:each="product : ${products}">
+        <div class="col" th:each="product : ${bestSellers}">
 		    <div class="card">
 		        <a th:href="@{/NMTLegit_Store/chitietsp/{id}(id=${product.maSanPham})}" class="text-decoration-none">
 		
-		            <img th:src="@{/images/sp1.png}" class="card-img-top round" alt="Zoom Pro">
 		            
-		            Hiển thị nhiều ảnh
-		            <div th:each="image, iterStat : ${product.hinhAnhs}" class="carousel-item" th:classappend="${iterStat.index == 0} ? 'active' : ''">
-		                <img th:src="@{'/images/products/' + ${image.duongDanHinh}}" alt="Hình ảnh" class="d-block w-100" style="width: 50px; height: auto;">
-		            </div>
+		            
+		           
+		            <img th:if="${product.hinhAnhs.size() > 0}" 
+                             th:src="@{'/images/products/' + ${product.hinhAnhs[0].duongDanHinh}}" 
+                             class="card-img-top rounded" alt="Product Image">
 		
 		            <div class="card-body">
 		                <h5 class="card-title" th:text="${product.TenSanPham}">Title</h5>
@@ -31,7 +31,7 @@
 		                    <span th:text="${#numbers.formatDecimal(product.GiaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></span>
 		                    <span class="text-decoration-line-through text-muted" th:text="${#numbers.formatDecimal(product.gia, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></span>
 		                    
-		                    Tính % giảm giá
+		                    
 		                    <span class="badge bg-danger"
 		                          th:if="${product.gia > product.GiaKhuyenMai}"
 		                          th:text="${'-' + #numbers.formatDecimal((1 - (product.GiaKhuyenMai / product.gia)) * 100, 0, 'COMMA', 0, 'POINT') + '%'}">
@@ -43,7 +43,7 @@
 		</div>
 
     </div>
-</div> -->
+</div> 
 
 
 <div th:fragment="homeBanner" class="container py-5">

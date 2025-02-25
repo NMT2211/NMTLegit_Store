@@ -44,5 +44,12 @@ public interface ChiTietDonHangDao extends JpaRepository<ChiTietDonHangEntity, I
               "GROUP BY nd.hoTen " +
               "ORDER BY SUM(ct.soLuong * ct.Gia) DESC")
        List<Object[]> findTopCustomers(); // Lấy tất cả, sẽ giới hạn sau
+       
+       @Query("SELECT c.sanPham, SUM(c.soLuong) as tongBan " +
+               "FROM ChiTietDonHangEntity c " +
+               "GROUP BY c.sanPham " +
+               "ORDER BY tongBan DESC")
+        List<Object[]> findBestSellingProducts();
+       
  
 }
