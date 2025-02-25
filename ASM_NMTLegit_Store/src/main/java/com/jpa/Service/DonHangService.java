@@ -14,4 +14,16 @@ public interface DonHangService {
     long countDonHangHomNay();
 
     long countDonHangBiHuy();
+    
+    List<DonHangEntity> getDonHangByTrangThai(String trangThai);
+    
+    List<DonHangEntity> getDonHangByDate(String orderDate);
+    
+    List<DonHangEntity> getDonHangByTrangThaiAndDate(String trangThai, String orderDate);
+    
+    List<DonHangEntity> getDonHangByDateRange(String fromDate, String toDate);
+    List<DonHangEntity> getDonHangByTrangThaiAndDateRange(String trangThai, String fromDate, String toDate);
+
+
+    
 }
