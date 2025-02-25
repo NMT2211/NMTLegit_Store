@@ -81,7 +81,7 @@
                 <h3 th:text="${product.tenSanPham}"></h3>
                 <p class="text-success" th:text="${product.tonKho > 0 ? 'Tình trạng: Còn hàng' : 'Tình trạng: Hết hàng'}"></p>
                 <p><strong>Mã sản phẩm: </strong><span th:text="${product.maSanPham}"></span></p>
-                <p><strong>Thể loại: </strong></p>
+                <p><strong>Thể loại: </strong><span th:text="${product.danhMuc.tenDanhMuc}"></span></p>
                 <div class="price-container">
                     <span class="current-price" th:text="${#numbers.formatDecimal(product.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + '₫'"></span><br>
                     <span class="original-price" th:if="${product.gia > product.giaKhuyenMai}" th:text="${#numbers.formatDecimal(product.gia, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
@@ -119,6 +119,25 @@
                 <p><strong>Chính sách bảo hành:</strong> <span th:text="${product.chinhSachBaoHanh}"></span></p>
                 <p><strong>Câu hỏi thường gặp:</strong> <span th:text="${product.cauHoiThuongGap}"></span></p>
        </div>
+       
+       <!-- Danh sách sản phẩm liên quan -->
+<div class="container mt-5">
+    <h4 class="mb-3">Sản phẩm liên quan</h4>
+    <div class="row">
+        <div class="col-md-3 mb-4" th:each="related : ${relatedProducts}">
+            <div class="card h-100">
+                <img th:src="@{'/images/products/' + ${related.hinhAnhs[0].duongDanHinh}}" class="card-img-top" alt="Sản phẩm">
+                <div class="card-body">
+                    <h6 class="card-title" th:text="${related.tenSanPham}"></h6>
+                    <p class="current-price" th:text="${#numbers.formatDecimal(related.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                    <p class="original-price" th:if="${related.gia > related.giaKhuyenMai}" th:text="${#numbers.formatDecimal(related.gia, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                    <a th:href="@{'/NMTLegit_Store/chitietsp/' + ${related.maSanPham}}" class="btn btn-outline-primary btn-sm">Xem chi tiết</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+       
                 
 
         <!-- Trường hợp không tìm thấy sản phẩm -->
@@ -139,6 +158,9 @@
 		        </div>
 		    </div>
 		</div>
+		
+		
+<div th:replace="~{shop/layout/footer :: shopFooter}"></div>
         
     <script>
     document.addEventListener("DOMContentLoaded", function () {

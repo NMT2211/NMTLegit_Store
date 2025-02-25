@@ -63,43 +63,68 @@
         </div>
 
         <div class="tab-pane fade" id="list-tab-pane">
-            <div class="input-group my-3">
-                <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." id="searchInput">
-                <select class="form-select" id="categoryFilter">
-                    <option value="">Tất cả danh mục</option>
-                    <option th:each="cat : ${categories}" th:value="${cat.tenDanhMuc}" th:text="${cat.tenDanhMuc}"></option>
-                </select>
-            </div>
+		    <div class="input-group my-3">
+			    <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." id="searchInput" th:value="${searchKeyword}">
+			    <select class="form-select" id="categoryFilter">
+			        <option value="">Tất cả danh mục</option>
+			        <option th:each="cat : ${categories}" th:value="${cat.maDanhMuc}" th:text="${cat.tenDanhMuc}" 
+			                th:selected="${selectedCategory == cat.maDanhMuc}"></option>
+			    </select>
+			</div>
 
-            <table class="table table-bordered">
-                <thead class="table-dark">
-                <tr>
-                    <th>Mã SP</th>
-                    <th>Tên SP</th>
-                    <th>Danh Mục</th>
-                    <th>Giá</th>
-                    <th>Khuyến Mãi</th>
-                    <th>Tồn Kho</th>
-                    <th>Hành Động</th>
-                </tr>
-                </thead>
-                <tbody id="productList">
-                <tr th:each="item : ${products}">
-                    <td th:text="${item.maSanPham}"></td>
-                    <td th:text="${item.tenSanPham}"></td>
-                    <td th:text="${item.danhMuc.tenDanhMuc}"></td>
-                    <td th:text="${item.gia}"></td>
-                    <td th:text="${item.giaKhuyenMai}"></td>
-                    <td th:text="${item.tonKho}"></td>
-                    <td>
-                        <a th:href="@{/admin/product/edit/{id}(id=${item.maSanPham})}" class="btn btn-warning btn-sm">Sửa</a>
-                        <a th:href="@{/admin/product/delete/{id}(id=${item.maSanPham})}" class="btn btn-danger btn-sm"
-                           onclick="return confirm('Bạn có chắc muốn xóa?');">Xóa</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+
+
+		
+		    <table class="table table-bordered">
+		        <thead class="table-dark">
+		        <tr>
+		            <th>Mã SP</th>
+		            <th>Tên SP</th>
+		            <th>Danh Mục</th>
+		            <th>Giá</th>
+		            <th>Khuyến Mãi</th>
+		            <th>Tồn Kho</th>
+		            <th>Hành Động</th>
+		        </tr>
+		        </thead>
+		        <tbody id="productList">
+		        <tr th:each="item : ${products.content}">
+		            <td th:text="${item.maSanPham}"></td>
+		            <td th:text="${item.tenSanPham}"></td>
+		            <td th:text="${item.danhMuc.tenDanhMuc}"></td>
+		            <td th:text="${item.gia}"></td>
+		            <td th:text="${item.giaKhuyenMai}"></td>
+		            <td th:text="${item.tonKho}"></td>
+		            <td>
+		                <a th:href="@{/admin/product/edit/{id}(id=${item.maSanPham})}" class="btn btn-warning btn-sm">Sửa</a>
+		                <a th:href="@{/admin/product/delete/{id}(id=${item.maSanPham})}" class="btn btn-danger btn-sm"
+		                   onclick="return confirm('Bạn có chắc muốn xóa?');">Xóa</a>
+		            </td>
+		        </tr>
+		        </tbody>
+		    </table>
+		
+		    <!-- Phân trang -->
+		    <nav aria-label="Page navigation">
+			    <ul class="pagination justify-content-center">
+			        <li class="page-item" th:if="${currentPage > 0}">
+			            <a class="page-link" th:href="@{/admin/product(page=${currentPage - 1}, size=20, search=${searchKeyword}, categoryId=${selectedCategory}, tab=${activeTab})}">Trước</a>
+			        </li>
+			
+			        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+			            th:classappend="${i == currentPage} ? 'active' : ''">
+			            <a class="page-link" th:href="@{/admin/product(page=${i}, size=20, search=${searchKeyword}, categoryId=${selectedCategory}, tab=${activeTab})}" th:text="${i + 1}"></a>
+			        </li>
+			
+			        <li class="page-item" th:if="${currentPage < totalPages - 1}">
+			            <a class="page-link" th:href="@{/admin/product(page=${currentPage + 1}, size=20, search=${searchKeyword}, categoryId=${selectedCategory}, tab=${activeTab})}">Tiếp</a>
+			        </li>
+			    </ul>
+			</nav>
+
+
+		</div>
+
 
     </div>
 </div>
@@ -117,6 +142,8 @@ function validateForm() {
     return true;
 }
 </script>
+
+
 
 <script>
 document.getElementById("searchInput").addEventListener("keyup", filterProducts);
@@ -142,6 +169,56 @@ function filterProducts() {
     });
 }
 </script>
+
+<script>
+function applyFilters() {
+    const searchInput = document.getElementById("searchInput").value;
+    const categoryFilter = document.getElementById("categoryFilter").value;
+    const currentTab = document.querySelector(".nav-link.active").getAttribute("data-bs-target").substring(1);
+
+    window.location.href = `/admin/product?search=${searchInput}&categoryId=${categoryFilter}&tab=${currentTab}`;
+}
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const activeTab = new URLSearchParams(window.location.search).get("tab");
+    if (activeTab) {
+        document.querySelector(`[data-bs-target="#${activeTab}"]`).click();
+    }
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const activeTab = new URLSearchParams(window.location.search).get("tab");
+    if (activeTab) {
+        document.querySelector(`[data-bs-target="#${activeTab}"]`).click();
+    }
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("searchInput");
+    const categoryFilter = document.getElementById("categoryFilter");
+
+    function applyFilters() {
+        const searchValue = searchInput.value;
+        const categoryValue = categoryFilter.value;
+        const currentTab = document.querySelector(".nav-link.active").getAttribute("data-bs-target").substring(1);
+
+        window.location.href = `/admin/product?search=${searchValue}&categoryId=${categoryValue}&tab=${currentTab}`;
+    }
+
+    searchInput.addEventListener("keyup", function() {
+        clearTimeout(this.delay);
+        this.delay = setTimeout(applyFilters, 500); // Gửi request sau khi dừng nhập 500ms
+    });
+
+    categoryFilter.addEventListener("change", applyFilters);
+});
+</script>
+
+
 
 </body>
 </html>

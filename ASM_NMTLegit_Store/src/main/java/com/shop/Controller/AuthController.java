@@ -34,6 +34,12 @@ public class AuthController {
         model.addAttribute("isLogin", false);
         return "auth/register";
     }
+    @GetMapping("/quen-mat-khau")
+    public String showForgotPasswordPage() {
+        return "auth/quenmk"; // Trả về trang quenmk.html trong thư mục templates
+    }
+    
+    
 
     @PostMapping("/auth/login")
     public String loginUser(@RequestParam String username, @RequestParam String password, HttpSession session, RedirectAttributes redirectAttributes) {

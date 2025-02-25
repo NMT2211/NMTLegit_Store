@@ -6,10 +6,17 @@ import com.jpa.Service.SanPhamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+
+import org.springframework.data.domain.Pageable;
+
+
 
 @Service
 public class SanPhamServiceImpl implements SanPhamService {
@@ -104,7 +111,36 @@ public class SanPhamServiceImpl implements SanPhamService {
     public long countAllSanPham() {
         return sanPhamDao.count();
     }
+    
+    
+    @Override
+    public Page<SanPhamEntity> getAllSanPham(Pageable pageable) {
+        return sanPhamDao.findAll(pageable);
+    }
 
+    @Override
+    public Page<SanPhamEntity> getSanPhamByCategory(String maDanhMuc, Pageable pageable) {
+        return sanPhamDao.findByDanhMuc_MaDanhMuc(maDanhMuc, pageable);
+    }
 
+    @Override
+    public Page<SanPhamEntity> getSanPhamByCategoryAndPrice(String categoryId, BigDecimal minPrice, BigDecimal maxPrice, Pageable pageable) {
+        return sanPhamDao.findByCategoryAndPrice(categoryId, minPrice, maxPrice, pageable);
+    }
+
+    @Override
+    public Page<SanPhamEntity> getSanPhamByCategoryAndName(String categoryId, String searchTerm, Pageable pageable) {
+        return sanPhamDao.findByDanhMuc_MaDanhMucAndTenSanPhamContainingIgnoreCase(categoryId, searchTerm, pageable);
+    }
+
+    @Override
+    public Page<SanPhamEntity> searchSanPhamByKeyword(String keyword, Pageable pageable) {
+        return sanPhamDao.findByTenSanPhamContainingIgnoreCase(keyword, pageable);
+    }
+
+    
+   
+
+   
 
 }

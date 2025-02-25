@@ -84,10 +84,11 @@ public class index {
         return "/shop/index";
     }
     
+    
+    
     @RequestMapping("/chitietsp/{id}")
-    public String getProductDetail(@PathVariable("id") String id, Model model,  HttpSession session) {
-    	
-    	Integer userId = (Integer) session.getAttribute("manguoidung");
+    public String getProductDetail(@PathVariable("id") String id, Model model, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("manguoidung");
 
         if (userId != null) {
             int cartCount = gioHangService.countProductsInCart(userId);
@@ -95,10 +96,30 @@ public class index {
         } else {
             model.addAttribute("cartCount", 0);
         }
+
+        // Lấy thông tin sản phẩm
+        
         model.addAttribute("product", sanPhamService.getSanPhamById(id));
+        try {
+            // Gọi service để lấy sản phẩm, nếu không có sẽ ném lỗi
+            SanPhamEntity product = sanPhamService.getSanPhamById(id);
+            model.addAttribute("product", product);
+
+            // Lấy danh sách sản phẩm liên quan (cùng danh mục, nhưng loại trừ sản phẩm hiện tại)
+            List<SanPhamEntity> relatedProducts = sanPhamService.getSanPhamByCategory(product.getDanhMuc().getMaDanhMuc())
+                    .stream()
+                    .filter(p -> !p.getMaSanPham().equals(id)) // Loại trừ chính sản phẩm đang xem
+                    .limit(6) // Giới hạn số sản phẩm liên quan
+                    .toList();
+
+            model.addAttribute("relatedProducts", relatedProducts);
+        } catch (RuntimeException e) {
+            return "redirect:/NMTLegit_Store/index"; // Nếu không tìm thấy sản phẩm, chuyển về trang chủ
+        }
         model.addAttribute("categories", danhMucService.findAll());
         return "/shop/chitietsp";
     }
+
     
     @RequestMapping("/category/{id}")
     public String getProductsByCategory(@PathVariable("id") String maDanhMuc, Model model,  HttpSession session) {
@@ -210,6 +231,8 @@ public class index {
 
         return "/shop/searchResults";
     }
+    
+   
 
 
 

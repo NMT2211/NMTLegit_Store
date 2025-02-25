@@ -52,6 +52,14 @@ public class NguoiDungEntity {
     @Column(name = "GioiTinh", nullable = false)
     @Builder.Default
     private Boolean gioiTinh = true; // true = Nam, false = Nữ
+    
+    
+    @Column(name = "ResetToken", length = 6)
+    private String resetToken;
+
+    @Column(name = "TokenExpiry")
+    private Date tokenExpiry;
+
 
     @PrePersist
     protected void onCreate() {

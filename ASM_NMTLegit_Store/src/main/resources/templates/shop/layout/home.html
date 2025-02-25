@@ -65,18 +65,21 @@
                              th:src="@{'/images/products/' + ${product.hinhAnhs[0].duongDanHinh}}" 
                              class="card-img-top rounded" alt="Product Image">
                         <div class="card-body">
-                            <h5 class="card-title text-dark" th:text="${product.tenSanPham}"></h5>
-                            <p class="card-text">
-                                <span class="text-danger fw-bold"
-                                      th:text="${#numbers.formatDecimal(product.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></span>
-                                <span class="text-muted text-decoration-line-through"
-                                      th:text="${#numbers.formatDecimal(product.gia, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></span>
-                                <span class="badge bg-danger ms-1"
-                                      th:if="${product.gia > product.giaKhuyenMai}"
-                                      th:text="${'-' + #numbers.formatDecimal((1 - (product.giaKhuyenMai / product.gia)) * 100, 0, 'COMMA', 0, 'POINT') + '%'}">
-                                </span>
-                            </p>
-                        </div>
+						    <h5 class="card-title text-dark" th:text="${product.tenSanPham}"></h5>
+						    <p class="card-text">
+						        <span class="text-danger fw-bold"
+						              th:text="${#numbers.formatDecimal(product.giaKhuyenMai, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></span>
+						
+						        <span th:if="${product.gia > product.giaKhuyenMai}">
+						            <span class="text-muted text-decoration-line-through"
+						                  th:text="${#numbers.formatDecimal(product.gia, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></span>
+						            <span class="badge bg-danger ms-1"
+						                  th:text="${'-' + #numbers.formatDecimal((1 - (product.giaKhuyenMai / product.gia)) * 100, 0, 'COMMA', 0, 'POINT') + '%'}">
+						            </span>
+						        </span>
+						    </p>
+						</div>
+
                     </a>
                 </div>
             </div>
